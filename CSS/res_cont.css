@@ -1,0 +1,86 @@
+.conenido {
+
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,0.7175245098039216) 0%, rgba(1,23,56,1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-attachment: fixed;
+
+
+}
+
+
+body{
+
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,0.7175245098039216) 0%, rgba(1,23,56,1) 100%);
+
+}
+
+
+.ficha-form .form-label {
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #343a40;
+}
+
+.ficha-form input,
+.ficha-form select,
+.ficha-form textarea {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.4rem;
+}
+
+.ficha-form input[readonly],
+.ficha-form textarea[readonly] {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.ficha-form {
+  font-size: 0.9rem;
+}
+.radio-icon {
+    display: none;
+}
+
+.icon-card {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: .2s;
+    padding: 12px;
+    border-radius: 10px;
+}
+.radio-icon:checked + .icon-card {
+   border-color: #f9eded;
+    background: #121212;
+    box-shadow: #dee2e6 0px 3px 6px, #dee2e6 0px 3px 6px;
+    color: #dee2e6;
+}
+
+.icon-card:hover {
+    border-color: #f9eded;
+    background: #121212;
+    box-shadow: #dee2e6 0px 3px 6px, #dee2e6 0px 3px 6px;
+    color: #dee2e6;
+
+}
+
+#card_item {
+ background: linear-gradient(135deg, #b5acf0, #f3e5c7);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+#card_item:hover {
+ background: linear-gradient(135deg,  #edb334, #b5acf0);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+ 
+}
+ 
+
+
