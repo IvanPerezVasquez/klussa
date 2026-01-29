@@ -1,18 +1,51 @@
 <?php 
 
-
-
-
 require('../CONFIG/sys.res.con.php');
 
 
 
+$mes    = $_POST['mes']    ?? '';
+$tipo   = $_POST['tipo']   ?? '';
+$codigo = $_POST['codigo'] ?? '';
+
+$campo1 = $_POST['campo1'] ?? '';
+$campo2 = $_POST['campo2'] ?? '';
+$campo3 = $_POST['campo3'] ?? '';
+
+
+
+
+// Inicializar array de filtros
+$filtros = [];
+
+// Lista de campos y valores recibidos
+$entradas = [
+    ['campo' => $campo1, 'valor' => $mes],
+    ['campo' => $campo2, 'valor' => $tipo],
+    ['campo' => $campo3, 'valor' => $codigo]
+];
+
+// Recorrer cada entrada y armar filtros
+foreach ($entradas as $e) {
+    if (!empty($e['campo']) && !empty($e['valor'])) {
+        // Escapar valor para seguridad
+        $valor = mysqli_real_escape_string($con, $e['valor']);
+        // Agregar filtro
+        $filtros[] = "$e[campo] = '$valor'";
+    }
+}
+
+// Convertir array de filtros en string concatenado con AND
+$ex_where = '';
+if (!empty($filtros)) {
+    $ex_where = ' AND ' . implode(' AND ', $filtros);
+}
 
 
 
 
 
-  $query="SELECT * 
+$query="SELECT *
 
             FROM
             dispocicion, 
@@ -37,8 +70,12 @@ require('../CONFIG/sys.res.con.php');
       and clf_sis_r.PK_clf_sis_r = residuos.FK_clf_sis_r
       and clf_desechos.PK_clf_des = residuos.FK_clf_res
       and t_residuo.PK_t_res = residuos.FK_t_res
-      and clf_desechos.PK_clf_des = 2   /* No Peligrosos */
-      ORDER BY fc_disp DESC ";
+      and clf_desechos.PK_clf_des = 2
+      $ex_where
+       ORDER BY fc_disp DESC
+      
+        /* No Peligrosos */
+    ";
 
 	$result = mysqli_query($con,$query); 
 	

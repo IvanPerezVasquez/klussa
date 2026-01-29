@@ -4,8 +4,15 @@ $(document).ready(function () {
   const user_log = $('#usuario_sistema').val();
 
   if (user_log && user_log.length !== 0) {
+
+    let url = '../DATABASE/cg_res_hse_no_p.php'; // URL estándar
+    let params = {};
    
-   residuos_no_peligrosos()
+    residuos_no_peligrosos(url, params);
+
+    fil_residuos();
+    fil_res();
+    cbx_clasificacion();
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -14,33 +21,37 @@ $(document).ready(function () {
 
 });
 
+ /// variables de entorno
+    let url = '../DATABASE/cg_res_hse_no_p.php'; // URL estándar
+    let params = {};
+    let llenar_tabla = []; 
 
-let llenar_tabla = []; 
 
-function residuos_no_peligrosos (){
+
+function residuos_no_peligrosos (url,params){
 
   
 
    
   $.ajax({
-    url: '../DATABASE/cg_res_hse_no_p.php',
-    type: 'POST',
+      url:url ,
+      data:params, 
+      type: 'POST',
+  
   
       success: function(response){
       console.log(response);
       $('#content_table').empty();
       llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
       
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
 
-
+      var json = JSON.parse(response);
 
       
-      if(!llenar_tabla.err){
+      if(!json.err){
           var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
+        $.each(json, function(i,item){
 
 
    
@@ -553,7 +564,7 @@ Swal.fire({
 
                         if (res.status === 'success') {
                      
-                            residuos_no_peligrosos();
+                             residuos_no_peligrosos(url, params);
 
                         }
                
@@ -617,7 +628,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success');     residuos_no_peligrosos();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success');      residuos_no_peligrosos(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -976,7 +987,7 @@ $(document).on('click', '#edit', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    residuos_no_peligrosos(); // refrescar la tabla después de la actualización
+                     residuos_no_peligrosos(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -1058,7 +1069,7 @@ $(document).on('click', '#btn_guardar', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    residuos_no_peligrosos(); // refrescar la tabla después de la actualización
+                     residuos_no_peligrosos(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -1116,7 +1127,7 @@ $(document).on('click', '#edit_textarea', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    residuos_no_peligrosos(); // refrescar la tabla después de la actualización
+                     residuos_no_peligrosos(url, params); // refrescar la tabla después de la actualización
                   }
                 );
   }
@@ -1181,3 +1192,121 @@ $("#btn_export_excel").on("click", function () {
 
 });
 
+/// filtros 
+
+function fil_res(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function fil_residuos(){
+  $.ajax({
+    url: '../DATABASE/cg_res_hse_no_p_lst.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_res').empty();
+        $('#cbx_fil_res').append('<option value="">RESIDUO</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+           var option = `<option value="${item.id_res}">${item.descrip_residuo}</option>`;
+           desc = item.descrip_residuo;
+           option = $(option).data('desc', desc);
+      
+            $('#cbx_fil_res').append(option);
+          
+
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_clasificacion(){
+  $.ajax({
+    url: '../DATABASE/cbx_t_residuo_f_np.php', // PHP que devuelve los manifiestos
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_tipo').empty();
+        $('#cbx_tipo').append('<option value="">TIPO </option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_t_res+'">'+item.t_residuo+'</option>';
+            $('#cbx_tipo').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// ejecucion del filtro 
+/// FILTROS
+
+function verificacar_filtro() {
+
+  const url = '../DATABASE/fil_reg_des_np.php';
+  let params = {};
+
+  const mes    = $('#cbx_fil_mes').val();
+  const tipo   = $('#cbx_tipo').val();
+  const codigo = $('#cbx_fil_res').val();
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_tipo').attr('name');
+  const campo3 = $('#cbx_fil_res').attr('name');
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (tipo) {
+    params.tipo = tipo;
+    params.campo2 = campo2;
+  }
+
+  if (codigo) {
+    params.codigo = codigo;
+    params.campo3 = campo3;
+  }
+
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+  residuos_no_peligrosos(url, params);
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
+
+});

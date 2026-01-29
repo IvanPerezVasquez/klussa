@@ -4,9 +4,15 @@ $(document).ready(function () {
   const user_log = $('#usuario_sistema').val();
 
   if (user_log && user_log.length !== 0) {
-   
-   
-    c_aut_c_agua_sedes();
+
+   // url de carga
+    let url = '../DATABASE/cg_c_agua_sedes.php';
+    let params = {};
+
+
+    c_aut_c_agua_sedes(url, params);
+    cbx_fil_ag();
+    fil_mes();
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -15,36 +21,40 @@ $(document).ready(function () {
 
 });
 
+  // variables de entorno
+      let url = '../DATABASE/cg_c_agua_sedes.php';
+      let params = {};
+      let llenar_tabla = []; 
 
-let llenar_tabla = []; 
 
 
-
-function c_aut_c_agua_sedes (){
+function c_aut_c_agua_sedes (url, params){
 
   
 
    
   $.ajax({
-    url: '../DATABASE/cg_c_agua_sedes.php',
-    type: 'POST',
-  
-    success: function(response){
+    
+    type: 'POST',  
+
+    url:url ,
+    data:params, 
+     success: function(response){
       console.log(response);
       $('#content_table').empty();
-     llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+      llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
       
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
 
-
+      var json = JSON.parse(response);
 
       
-      if(!llenar_tabla.err){
-          var contador=1;
+      if(!json.err){
+         
+        var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
-          
+        $.each(json, function(i,item){
+
+
 
 
    
@@ -410,7 +420,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success');     c_aut_c_agua_sedes();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success');      c_aut_c_agua_sedes(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -492,7 +502,7 @@ Swal.fire({
 
                         if (res.status === 'success') {
                      
-                            c_aut_c_agua_sedes();
+                             c_aut_c_agua_sedes(url, params);
 
                         }
                
@@ -689,22 +699,22 @@ $('#form_modal_footer').append(footer);
 });
 
 
+
 // generacion de pdf
+
 $(document).on('click', '#btn_pdf', function() {
 
 
 
-  let cp = llenar_tabla.find(item => item.PK_disp == parseInt(pk_registro));
-
-  if(!cp){
+  if(!llenar_tabla){
    console.error('No se encontró el registro c');
     return;
   }
 
   $.ajax({
-    url: '../PDF/bit_peligrosos.php',
+    url: '../PDF/c_agua_sedes.php',
     type: 'POST',
-    data: { cp: JSON.stringify(cp) },
+    data: { cp: JSON.stringify(llenar_tabla) },
     xhrFields: { responseType: 'blob' },
     success: function(blob) {
       if(blob.size === 0){
@@ -715,7 +725,7 @@ $(document).on('click', '#btn_pdf', function() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'EC-HSE-F-53-RESIDUOS_PELIGROSOS.pdf';
+      a.download = 'Consumo_Agua_Sedes.pdf';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -728,6 +738,7 @@ $(document).on('click', '#btn_pdf', function() {
 
 });
 
+///
 
 
 
@@ -779,7 +790,7 @@ $(document).on('click', '#edit', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_aut_c_agua_sedes(); // refrescar la tabla después de la actualización
+                     c_aut_c_agua_sedes(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -856,7 +867,7 @@ $(document).on('click', '#btn_guardar', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_aut_c_agua_sedes(); // refrescar la tabla después de la actualización
+                     c_aut_c_agua_sedes(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -878,11 +889,11 @@ $(document).on('click', '#btn_guardar', function() {
 ///////exportar en excel 
 
 
-
+/// reporte en excel 
 $("#btn_export_excel").on("click", function () {
 
     $.ajax({
-        url: "../EXCEL/RP_RES_P.php",
+        url: "../EXCEL/RP_C_A_S.php",
         type: "POST",
         data: { data: JSON.stringify(llenar_tabla) },
         xhrFields: { responseType: "blob" },
@@ -890,9 +901,103 @@ $("#btn_export_excel").on("click", function () {
         success: function (blob) {
             const link = document.createElement("a");
             link.href = window.URL.createObjectURL(blob);
-            link.download = "EC-HSE-F-53-RESIDUOS_PELIGROSOS.xls";
+            link.download = "EC-HSE-F-53-CONSUMO-AGUA-SEDES.xls";
             link.click();
         }
     });
+
+});
+
+/// FILTROS FUNCIONALIDADES 
+
+/// filtros 
+
+function fil_mes(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_fil_ag(){
+  $.ajax({
+    url: '../DATABASE/cg_agencia_cbx.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_ag').empty();
+        $('#cbx_fil_ag').append('<option value="">AGENCIA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_pro+'">'+item.proyecto+'</option>';
+            $('#cbx_fil_ag').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// ejecucion del filtro 
+/// FILTROS
+
+function verificacar_filtro() {
+  
+/// vaibles de archivo y parametros de busqueda 
+  const url = '../DATABASE/fil_c_agua_sedes.php';
+  let params = {};
+
+
+  /// variables de busqueda
+  const mes    = $('#cbx_fil_mes').val();
+  const agencia   = $('#cbx_fil_ag').val();
+
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_fil_ag').attr('name');
+
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (agencia) {
+    params.agencia = agencia;
+    params.campo2 = campo2;
+  }
+
+  
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+  c_aut_c_agua_sedes(url, params);
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
 
 });

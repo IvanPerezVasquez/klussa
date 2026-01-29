@@ -87,7 +87,7 @@
                         </li>
 
                              <li class="nav-item px-2 mt-2 mb-2">
-                            <a class="btn shadow col-12 p-2" id="c_agua_pozo_btn">
+                            <a class="btn shadow col-12 p-2" id="btn_c_ad">
                                <i class="fas fa-vial"></i> CONSUMO | ADTIVOS
                             </a>
                         </li>

@@ -5,8 +5,13 @@ $(document).ready(function () {
 
   if (user_log && user_log.length !== 0) {
    
-   
-    c_aut_des_p();
+    let url = '../DATABASE/cg_res_hse_esp.php'; // URL estándar
+    let params = {};
+
+    c_aut_des_p(url, params);
+    fil_residuos();
+    fil_res();
+    cbx_clasificacion();
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -16,34 +21,38 @@ $(document).ready(function () {
 });
 
 
-let llenar_tabla = []; 
 
 
+  /// vatiables de entorno
+  // URL estándar
+  let llenar_tabla = []; 
+  let url = '../DATABASE/cg_res_hse_esp.php'; 
+  let params = {};
+   
 
-function c_aut_des_p (){
+function c_aut_des_p (url,params){
 
   
-
-   
   $.ajax({
-    url: '../DATABASE/cg_res_hse_esp.php',
+    url:url ,
+    data:params, 
     type: 'POST',
   
-    success: function(response){
+      success: function(response){
       console.log(response);
       $('#content_table').empty();
-     llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+      llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+      var json = JSON.parse(response);
       
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
+      
 
 
 
       
-      if(!llenar_tabla.err){
+      if(!json.err){
           var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
+        $.each(json, function(i,item){
           
 
 
@@ -83,26 +92,9 @@ function c_aut_des_p (){
 `;
 
 
-         
 
-
-
-
-
-         
-         
-         
-         
-
-          
-
-         
-     
-          
-      
         
        }
-
 
 
           //asignacion de informacion
@@ -113,17 +105,11 @@ function c_aut_des_p (){
 
 
         })
+      }else{
+
+       mensaje(json.mensaje,'info')
+
       }
-      else{
-
-           Swal.fire({
-                icon: 'info',
-                title: 'Ningún dato encontrado',
-                text:  'No existen registros.'
-                
-
-                })
-          }
     }
   })
 
@@ -131,6 +117,26 @@ function c_aut_des_p (){
 }
 
 /// mostrar datos en  el  sistema
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -346,7 +352,7 @@ function cbx_mes_res(){
       var json = JSON.parse(response);
       if(!json.err){
         $('#cbx_mes_res').empty();
-        $('#cbx_mes_res').append('<option value="">SELECCIONE UNA OPCIÓN</option>');
+        $('#cbx_mes_res').append('<option value="">MES</option>');
         $.each(json, function(i,item){
           if(i!="err"){
             var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
@@ -359,8 +365,76 @@ function cbx_mes_res(){
 }
 
 
+/// filtros 
+
+function fil_res(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
 
 
+function fil_residuos(){
+  $.ajax({
+    url: '../DATABASE/cg_codigo_cbx_des_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_res').empty();
+        $('#cbx_fil_res').append('<option value="">RESIDUO</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+           var option = `<option value="${item.id_res}">${item.code_res}</option>`;
+           desc = item.descrip_residuo;
+           option = $(option).data('desc', desc);
+      
+            $('#cbx_fil_res').append(option);
+          
+
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_clasificacion(){
+  $.ajax({
+    url: '../DATABASE/cbx_t_residuo_f_p.php', // PHP que devuelve los manifiestos
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_tipo').empty();
+        $('#cbx_tipo').append('<option value="">TIPO </option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_t_res+'">'+item.t_residuo+'</option>';
+            $('#cbx_tipo').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// modal 
 
 function cbx_res(){
   $.ajax({
@@ -370,7 +444,7 @@ function cbx_res(){
       var json = JSON.parse(response);
       if(!json.err){
         $('#cbx_res').empty();
-        $('#cbx_res').append('<option value="">SELECCIONE UNA OPCIÓN</option>');
+        $('#cbx_res').append('<option value="">RESIDUO</option>');
         $.each(json, function(i,item){
           if(i!="err"){
            var option = `<option value="${item.id_res}">${item.code_res}</option>`;
@@ -510,6 +584,7 @@ function cbx_ubicacion(){
 
 
 
+
 /////////////// calcular 
 
 
@@ -536,6 +611,9 @@ function cbx_ubicacion(){
 
 
 $(document).on('click', '#btn_registro', function () {
+
+    let url = '../DATABASE/cg_res_hse_esp.php'; // URL estándar
+    let params = {};
   
 // capturo datos del formulario
   const fechaEntrega = $('#fecha_entrega').val().trim();
@@ -586,7 +664,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success');     c_aut_des_p();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success');     c_aut_des_p(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -630,52 +708,11 @@ function mensaje(mensaje, icono) {
 
 
 
-function inser_reg (){
-
-var parametros = new FormData($("#detalle_residuo")[0]);
-
-  
-
-  $.ajax({
-    type:"POST",
-    url: "../DATABASE/insert_reg_p.php",
-    data:parametros,
-    contentType:false,
-    processData: false, 
-    success:function(response){
-    console.log(response);
-        var json = JSON.parse(response);
-    
-        if(!json.err){
-
-
-          Swal.fire(
-            'Operación completada con éxito!',
-            json.mensaje,
-            'success');
-          
-      residuos_peligrosos();
-         
-        }else{
-
-
-          Swal.fire({
-            icon: 'error',
-            title: json.mensaje,
-            text:  'Error'
-            // ,footer: '<a href>Como solucionarlo?</a>'
-            })
-            
-         
-        }
-      }
-  });
-
-}
-
-
 /// eliminacion de registros//
 $(document).on('click','#btn_delete',function(event){
+
+    let url = '../DATABASE/cg_res_hse_esp.php'; // URL estándar
+    let params = {};
 
 // MOSTRAMOS LOS RECURSOS PARA CARGAR DATOS
 
@@ -711,7 +748,7 @@ Swal.fire({
 
                         if (res.status === 'success') {
                      
-                            c_aut_des_p();
+                            c_aut_des_p(url, params);
 
                         }
                
@@ -1058,7 +1095,7 @@ $(document).on('click', '#edit', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_aut_des_p(); // refrescar la tabla después de la actualización
+                    c_aut_des_p(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -1135,7 +1172,7 @@ $(document).on('click', '#btn_guardar', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_aut_des_p(); // refrescar la tabla después de la actualización
+                    c_aut_des_p(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -1195,13 +1232,14 @@ $(document).on('click', '#edit_textarea', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_aut_des_p(); // refrescar la tabla después de la actualización
+                    c_aut_des_p(url, params); // refrescar la tabla después de la actualización
                   }
                 );
   }
   
 })
 
+/// GENERO EL REPORTE EN EXCEL
 
 
 $("#btn_export_excel").on("click", function () {
@@ -1219,5 +1257,56 @@ $("#btn_export_excel").on("click", function () {
             link.click();
         }
     });
+
+});
+
+
+
+/// FILTROS
+
+function verificacar_filtro() {
+
+  const url = '../DATABASE/fil_reg_des_p.php';
+  let params = {};
+
+  const mes    = $('#cbx_fil_mes').val();
+  const tipo   = $('#cbx_tipo').val();
+  const codigo = $('#cbx_fil_res').val();
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_tipo').attr('name');
+  const campo3 = $('#cbx_fil_res').attr('name');
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (tipo) {
+    params.tipo = tipo;
+    params.campo2 = campo2;
+  }
+
+  if (codigo) {
+    params.codigo = codigo;
+    params.campo3 = campo3;
+  }
+
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+  c_aut_des_p(url, params);
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
 
 });

@@ -223,16 +223,14 @@ $('#form_modal_footer').empty('');
     <label for="cbx_agencia" class="form-label small fw-semibold text-muted">
       Agencia
     </label>
-    <select class="form-select form-select-sm" 
-            id="cbx_agencia" name="cbx_agencia"></select>
+    <select class="form-select form-select-sm"  id="cbx_agencia" name="cbx_agencia"></select>
   </div>
 
   <div class="col-md-6">
     <label for="cbx_maquina" class="form-label small fw-semibold text-muted">
       Máquina
     </label>
-    <select class="form-select form-select-sm" 
-            id="cbx_maquina" name="cbx_maquina"></select>
+    <select class="form-select form-select-sm"  id="cbx_maquina" name="cbx_maquina"></select>
   </div>
 
   <!-- TIPO COMBUSTIBLE -->
