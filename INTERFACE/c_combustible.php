@@ -2,56 +2,95 @@
 
   <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
 
-    <!-- Encabezado -->
-    <div class="card-header bg-gradient text-white" 
-         style="background: linear-gradient(90deg, #007bff, #0056b3);">
-      <h5 class="mb-0 fw-bold">
-      <i class="fas fa-gas-pump"></i>
-       CONSUMO COMBUSTIBLE | MAQUINARIA 
-      </h5>
-    </div>
 
-    <!-- Cuerpo -->
+
+  <!-- Encabezado -->
     <div class="card-body bg-light mt-3 mb-4 rounded-4">
 
-      <!-- Botón de registro -->
-      <div class="text-end mb-3">
-         
+          <!-- BANNER -->
+      <div class="card border-0 shadow-sm rounded-4 mb-4" id="bnn_int">
+              <div class="card-body text-white py-4 px-4">
+                  <div class="col-md-12">
+                    <h4 class="fw-semibold mb-1">
+                       CONSUMO COMBUSTIBLE MAQUINARIA
+                    </h4>
+              
+                </div>
+        </div>
+  </div>
 
-        <button id="bnt_reg_res_p" 
-                type="button" 
-                class="btn btn-primary px-4 shadow-sm">
-          <i class="fa-solid fa-plus me-2"></i>Registrar
-        </button>
-      </div>
 
-     <!-- Botón de registro -->
-      <div class="text-end mb-3">
+   <!-- FILTROS + ACCIONES -->
+      <div class="container-fluid mb-2">
+        <div class="row align-items-center">
 
-      
-          
-          
+          <!-- Filtros -->
+          <div class="col-lg-8 col-md-6 col-12 mb-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+
+             <select name="FK_mes" id="cbx_fil_mes" class="form-select form-select-sm w-auto">
+                <option value="">MES</option>
+              </select>
+
+                <select name="FK_t_com" id="cbx_fil_comb" class="form-select form-select-sm w-auto">
+                  <option value="">COMBUSTIBLE</option>
+                </select>
+
+                <select name="FK_maquina" id="cbx_fil_mq" class="form-select form-select-sm w-auto">
+                  <option value="">MAQUINA</option>
+                </select>
              
-<div class="col-md-6">
-    <div class="position-relative">
-        <input type="text" 
-               class="form-control form-control-sm pe-4 " 
-               id="buscar_residuo"  
-               placeholder="Buscar...">
+                <select name="FK_pro" id="cbx_fil_ag" class="form-select form-select-sm w-auto">
+                  <option value="">AGENCIA</option>
+                </select>
 
-        <i class="fa-solid fa-magnifying-glass text-secondary position-absolute" 
-           style="right: 10px; top: 50%; transform: translateY(-50%); opacity: .7;"></i>
-    </div>
-</div>
+                <button id="btn_flt" class="btn btn-sm btn-outline-dark">
+               FILTRAR <i class="fas fa-filter"></i>
+              </button>
 
-    
-      
-      
-      
-      
-         
-      
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="col-lg-4 col-md-6 col-12 mb-2">
+            <div class="d-flex justify-content-lg-end justify-content-start gap-2">
+
+              <button id="bnt_reg_res_p" class="btn btn-sm btn-primary">
+              <i class="fa-solid fa-gas-pump"></i> Registrar
+              </button>
+
+              <button id="btn_pdf" class="btn btn-sm btn-outline-danger">
+               PDF <i class="fas fa-file-pdf"></i>
+              </button>
+
+              <button id="btn_export_excel" class="btn btn-sm btn-outline-success">
+               EXCEL <i class="fas fa-file-excel"></i>
+              </button>
+
+            </div>
+          </div>
+
+        </div>
       </div>
+
+    <!-- BUSCADOR -->
+      <div class="row mb-2">
+        <div class="col-lg-4 col-md-6 col-12 ms-auto">
+          <div class="position-relative">
+            <input type="text"
+                   class="form-control form-control-sm pe-4"
+                   id="buscar_residuo"
+                   placeholder="Buscar...">
+            <i class="fa-solid fa-magnifying-glass text-secondary position-absolute"
+               style="right:10px; top:50%; transform:translateY(-50%); opacity:.7;"></i>
+          </div>
+        </div>
+      </div>
+
+
+
+
+  
 
 
 

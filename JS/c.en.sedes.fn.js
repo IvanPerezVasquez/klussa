@@ -5,8 +5,16 @@ $(document).ready(function () {
 
   if (user_log && user_log.length !== 0) {
    
-   
-    c_energia_sedes();
+    /// url de acceso al servicio
+
+    let url = '../DATABASE/cg_c_energia.php';
+    let params = {};
+
+
+    /// auto ejecucion 
+    fil_mes(); 
+    cbx_fil_ag();   
+    c_energia_sedes(url, params);
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -15,35 +23,37 @@ $(document).ready(function () {
 
 });
 
+/// variables de entorno 
+    let url = '../DATABASE/cg_c_energia.php';
+    let params = {};
+    let llenar_tabla = []; 
 
-let llenar_tabla = []; 
 
-
-
-function c_energia_sedes (){
+function c_energia_sedes (url, params){
 
   
 
    
   $.ajax({
-    url: '../DATABASE/cg_c_energia.php',
+    
     type: 'POST',
+    url:url ,
+    data:params, 
   
     success: function(response){
       console.log(response);
       $('#content_table').empty();
      llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+ 
+     var json = JSON.parse(response);
+ 
+
+
       
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
-
-
-
-      
-      if(!llenar_tabla.err){
+      if(!json.err){
           var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
+        $.each(json, function(i,item){
           
 
 
@@ -77,9 +87,7 @@ function c_energia_sedes (){
                 <i class="fas fa-edit"></i>
                   </button>
                  
-                 <button type="button" class="btn btn-outline-primary btn-sm mb-1 mt-1" id="btn_pdf">
-                 <i class="far fa-file-alt"></i>
-                  </button> 
+    
 
                    
                 
@@ -417,7 +425,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success'); c_energia_sedes();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success'); c_energia_sedes(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -499,7 +507,7 @@ function mensaje(mensaje, icono) {
 
                             if (res.status === 'success') {
                         
-                                c_energia_sedes();
+                                c_energia_sedes(url, params);
 
                             }
                   
@@ -870,7 +878,7 @@ $(document).on('click', '#edit', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_energia_sedes(); // refrescar la tabla después de la actualización
+                    c_energia_sedes(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -950,7 +958,7 @@ $(document).on('click', '#btn_guardar', function() {
 
                     console.log('Respuesta del servidor:', response);
                     mensaje(json.mensaje, json.status);
-                    c_energia_sedes(); // refrescar la tabla después de la actualización
+                    c_energia_sedes(url, params); // refrescar la tabla después de la actualización
                   }
                 );
 
@@ -992,4 +1000,100 @@ $(document).on('click', '#btn_guardar', function() {
         });
 
 
+/// filtros 
 
+//// 
+
+function fil_mes(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_fil_ag(){
+  $.ajax({
+    url: '../DATABASE/cg_agencia_cbx.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_ag').empty();
+        $('#cbx_fil_ag').append('<option value="">AGENCIA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_pro+'">'+item.proyecto+'</option>';
+            $('#cbx_fil_ag').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// ejecucion del filtro 
+/// FILTROS
+
+function verificacar_filtro() {
+  
+/// vaibles de archivo y parametros de busqueda 
+  const url = '../DATABASE/fil_c_energia.php';
+  let params = {};
+
+
+  /// variables de busqueda
+  const mes    = $('#cbx_fil_mes').val();
+  const agencia   = $('#cbx_fil_ag').val();
+
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_fil_ag').attr('name');
+
+
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (agencia) {
+    params.agencia = agencia;
+    params.campo2 = campo2;
+  }
+
+
+  
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+
+  c_energia_sedes(url, params);
+
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
+
+});

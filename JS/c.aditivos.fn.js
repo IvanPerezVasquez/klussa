@@ -5,8 +5,17 @@ $(document).ready(function () {
 
   if (user_log && user_log.length !== 0) {
    
-   
-    c_adtivos();
+    let url = '../DATABASE/cg_c_aditivos.php';
+    let params = {};
+
+    c_adtivos(url, params);
+
+
+   /// DEPENDENCIAS DE FILTROS
+    cbx_fil_ag();
+    fil_mes();
+    cbx_fil_mq();
+    cbx_fil_adt();
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -20,30 +29,30 @@ let llenar_tabla = [];
 
 
 
-function c_adtivos (){
+function c_adtivos (url, params){
 
   
 
    
   $.ajax({
-    url: '../DATABASE/cg_c_aditivos.php',
+ 
     type: 'POST',
+    url:url ,
+    data:params, 
   
     success: function(response){
       console.log(response);
       $('#content_table').empty();
-     llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
-      
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
+      llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+      var json = JSON.parse(response);
 
 
 
       
-      if(!llenar_tabla.err){
+      if(!json.err){
           var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
+        $.each(json, function(i,item){
           
 
 
@@ -473,7 +482,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success'); c_adtivos();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success'); c_adtivos(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -555,7 +564,7 @@ function mensaje(mensaje, icono) {
 
                             if (res.status === 'success') {
                         
-                                c_adtivos();
+                                c_adtivos(url, params);
 
                             }
                   
@@ -862,7 +871,7 @@ $(document).on('click', '#btn_pdf_g', function() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'EC-HSE-F-53-RESIDUOS_PELIGROSOS.pdf';
+      a.download = 'EC-HSE-F-53-CONSUMO_ADITIVOS.pdf';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1040,7 +1049,7 @@ $(document).on('click', '#btn_guardar', function() {
                 success: function (blob) {
                     const link = document.createElement("a");
                     link.href = window.URL.createObjectURL(blob);
-                    link.download = "EC-HSE-F-53-RESIDUOS_PELIGROSOS.xls";
+                    link.download = "EC-HSE-F-53-CONSUMO_ADITIVOS.xls";
                     link.click();
                 }
             });
@@ -1049,3 +1058,163 @@ $(document).on('click', '#btn_guardar', function() {
 
 
 
+/// filtros 
+
+//// 
+
+function fil_mes(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_fil_ag(){
+  $.ajax({
+    url: '../DATABASE/cg_agencia_cbx.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_ag').empty();
+        $('#cbx_fil_ag').append('<option value="">AGENCIA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_pro+'">'+item.proyecto+'</option>';
+            $('#cbx_fil_ag').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+/// cargar cbx maquina
+
+function cbx_fil_mq(){
+  $.ajax({
+    url: '../DATABASE/cbx_ma_res.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mq').empty();
+        $('#cbx_fil_mq').append('<option value="">MAQUINA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_maquina+'">'+item.serie_maquina+'</option>';
+            $('#cbx_fil_mq').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+
+function cbx_fil_adt(){
+  $.ajax({
+    url: '../DATABASE/cbx_aditivos.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_adt').empty();
+        $('#cbx_fil_adt').append('<option value="">ADITIVO</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+       var option = '<option value="'+item.PK_ad+'">'+item.ad_rs+'</option>';
+            $('#cbx_fil_adt').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+
+
+
+/// ejecucion del filtro 
+/// FILTROS
+
+/// ejecucion del filtro 
+/// FILTROS
+
+function verificacar_filtro() {
+  
+/// vaibles de archivo y parametros de busqueda 
+  const url = '../DATABASE/fil_c_aditivos.php';
+  let params = {};
+
+
+  /// variables de busqueda
+  const mes    = $('#cbx_fil_mes').val();
+  const agencia   = $('#cbx_fil_ag').val();
+  const adt   = $('#cbx_fil_adt').val(); 
+  const mq = $('#cbx_fil_mq').val(); 
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_fil_ag').attr('name');
+  const campo3   = $('#cbx_fil_adt').attr('name');
+  const campo4 = $('#cbx_fil_mq').attr('name');
+
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (agencia) {
+    params.agencia = agencia;
+    params.campo2 = campo2;
+  }
+  if (adt) {
+    params.adt = adt;
+    params.campo3 = campo3;
+  }
+
+  if (mq) {
+      params.mq = mq;
+      params.campo4 = campo4;
+    }
+
+
+  
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+
+  c_adtivos(url, params);
+
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
+
+});

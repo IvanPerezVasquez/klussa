@@ -85,23 +85,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <!-- Tabla -->
       <div class="table-responsive rounded-3 shadow-sm">
        <table class="table table-hover align-middle mb-0 text-nowrap shadow-sm text-uppercase" id="tabla_res">

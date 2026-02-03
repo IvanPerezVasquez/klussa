@@ -3,16 +3,15 @@
   <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
 
   
-
- <div class="card-body bg-light mt-3 mb-4 rounded-4">
+ <!-- Encabezado -->
+    <div class="card-body bg-light mt-3 mb-4 rounded-4">
 
           <!-- BANNER -->
       <div class="card border-0 shadow-sm rounded-4 mb-4" id="bnn_int">
               <div class="card-body text-white py-4 px-4">
                   <div class="col-md-12">
                     <h4 class="fw-semibold mb-1">
-                     
-                    COSUMO DE ADITIVOS 
+                   CONSUMO DE ADITIVOS 
                     </h4>
               
                 </div>
@@ -20,43 +19,82 @@
   </div>
 
 
+   <!-- FILTROS + ACCIONES -->
+      <div class="container-fluid mb-2">
+        <div class="row align-items-center">
 
+          <!-- Filtros -->
+          <div class="col-lg-8 col-md-6 col-12 mb-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
 
+              <select name="FK_mes" id="cbx_fil_mes" class="form-select form-select-sm w-auto">
+                <option value="">Código</option>
+              </select>
 
-    
-<div class="container-fluid mb-4">
- 
-    <div class="row mb-3">
-        
-    <!-- buscador -->
-        <div class="text-end mb-3 col-lg-6 col-md-6 col-sm-12">         
-          <div class="col-12">
-              <div class="position-relative">
-                  <input type="text" 
-                        class="form-control form-control-sm pe-4 " 
-                        id="buscar_residuo"  
-                        placeholder="Buscar...">
+             
+              <select name="FK_pro" id="cbx_fil_ag" class="form-select form-select-sm w-auto">
+                <option value="">Código</option>
+              </select>
 
-                  <i class="fa-solid fa-magnifying-glass text-secondary position-absolute" 
-                    style="right: 10px; top: 50%; transform: translateY(-50%); opacity: .7;"></i>
-              </div>
-          </div>     
+               <select name="FK_ad_rs" id="cbx_fil_adt" class="form-select form-select-sm w-auto">
+                  <option value="">ADITIVO</option>
+                </select>
+
+                <select name="FK_maquina" id="cbx_fil_mq" class="form-select form-select-sm w-auto">
+                  <option value="">MAQUINA</option>
+                </select>
+             
+
+                <button id="btn_flt" class="btn btn-sm btn-outline-dark">
+               FILTRAR <i class="fas fa-filter"></i>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="col-lg-4 col-md-6 col-12 mb-2">
+            <div class="d-flex justify-content-lg-end justify-content-start gap-2">
+
+              <button id="bnt_reg" class="btn btn-sm btn-primary">
+               <i class="fas fa-vial"></i>   Registrar
+              </button>
+
+              <button id="btn_pdf_g" class="btn btn-sm btn-outline-danger">
+               PDF <i class="fas fa-file-pdf"></i>
+              </button>
+
+              <button id="btn_excel" class="btn btn-sm btn-outline-success">
+               EXCEL <i class="fas fa-file-excel"></i>
+              </button>
+
+            </div>
+          </div>
+
+        </div>
       </div>
 
-    <div class="mb-3 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end gap-2">
-        <button id="bnt_reg" class="btn btn-sm btn-primary"> <i class="fas fa-vial"></i> Registar </button>
-        <button id="btn_pdf_g" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"></i> PDF</button>
-        <button id="btn_excel" class="btn btn-sm btn-outline-success">EXCEL <i class="fas fa-file-excel"></i></button>
-    </div>
+    <!-- BUSCADOR -->
+      <div class="row mb-2">
+        <div class="col-lg-4 col-md-6 col-12 ms-auto">
+          <div class="position-relative">
+            <input type="text"
+                   class="form-control form-control-sm pe-4"
+                   id="buscar_residuo"
+                   placeholder="Buscar...">
+            <i class="fa-solid fa-magnifying-glass text-secondary position-absolute"
+               style="right:10px; top:50%; transform:translateY(-50%); opacity:.7;"></i>
+          </div>
+        </div>
+      </div>
 
 
 
-    </div>
+ 
 
 
-</div>
-     
 
+ 
 
 
 

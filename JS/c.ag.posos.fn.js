@@ -5,8 +5,18 @@ $(document).ready(function () {
 
   if (user_log && user_log.length !== 0) {
    
-   
-    c_aut_c_agua_pozos();
+ /// url de acceso al servicio
+
+    let url = '../DATABASE/cg_c_agua_pozos.php';
+    let params = {};
+
+    /// actvacion de servicios 
+
+
+    cbx_fil_ag();
+    cbx_fil_mq();
+    fil_mes();
+    c_aut_c_agua_pozos(url, params);
 
   } else {
     console.warn('No se encontró el usuario del sistema.');
@@ -16,34 +26,37 @@ $(document).ready(function () {
 });
 
 
-let llenar_tabla = []; 
+/// variables de entorno
+    let url = '../DATABASE/cg_c_agua_pozos.php';
+    let params = {};
+    let llenar_tabla = []; 
 
 
 
-function c_aut_c_agua_pozos (){
+function c_aut_c_agua_pozos (url, params){
 
   
 
    
   $.ajax({
-    url: '../DATABASE/cg_c_agua_pozos.php',
+    url:url ,
+    data:params, 
     type: 'POST',
   
-    success: function(response){
-      console.log(response);
-      $('#content_table').empty();
-     llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
+        success: function(response){
+          console.log(response);
+          $('#content_table').empty();
+        llenar_tabla = Object.values(JSON.parse(response)).filter(item => typeof item === 'object');
       
-      console.log('llenar_tabla:', llenar_tabla);
-      console.log('Es array:', Array.isArray(llenar_tabla));
+          var json = JSON.parse(response);
 
 
 
       
-      if(!llenar_tabla.err){
+      if(!json.err){
           var contador=1;
 
-        $.each(llenar_tabla, function(i,item){
+        $.each(json, function(i,item){
           
 
 
@@ -467,7 +480,7 @@ $(document).on('click', '#btn_registro', function () {
      
        var json = JSON.parse(response);
     
-        if(!json.err){  mensaje(json.mensaje,'success'); c_aut_c_agua_pozos();  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
+        if(!json.err){  mensaje(json.mensaje,'success');c_aut_c_agua_pozos(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
 
 
 
@@ -549,7 +562,7 @@ function mensaje(mensaje, icono) {
 
                             if (res.status === 'success') {
                         
-                                c_aut_c_agua_pozos();
+                               c_aut_c_agua_pozos(url, params);
 
                             }
                   
@@ -766,7 +779,7 @@ function armar_formulario(ficha, footer){
 
                           console.log('Respuesta del servidor:', response);
                           mensaje(json.mensaje, json.status);
-                          c_aut_c_agua_pozos(); 
+                         c_aut_c_agua_pozos(url, params); 
                           
                           // refrescar la tabla después de la actualización
                         }
@@ -908,7 +921,7 @@ function armar_formulario(ficha, footer){
 
                         console.log('Respuesta del servidor:', response);
                         mensaje(json.mensaje, json.status);
-                        c_aut_c_agua_pozos(); 
+                       c_aut_c_agua_pozos(url, params); 
                         
                         // refrescar la tabla después de la actualización
                       }
@@ -926,17 +939,17 @@ $(document).on('click', '#btn_pdf', function() {
 
 
 
-  let cp = llenar_tabla.find(item => item.PK_disp == parseInt(pk_registro));
 
-  if(!cp){
+
+  if(!llenar_tabla){
    console.error('No se encontró el registro c');
     return;
   }
 
   $.ajax({
-    url: '../PDF/bit_peligrosos.php',
+    url: '../PDF/c_agua_pz.php',
     type: 'POST',
-    data: { cp: JSON.stringify(cp) },
+    data: { cp: JSON.stringify(llenar_tabla) },
     xhrFields: { responseType: 'blob' },
     success: function(blob) {
       if(blob.size === 0){
@@ -947,7 +960,7 @@ $(document).on('click', '#btn_pdf', function() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'EC-HSE-F-53-RESIDUOS_PELIGROSOS.pdf';
+      a.download = 'EC-HSE-F-53-AGUA-POZOS.pdf';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -970,7 +983,7 @@ $(document).on('click', '#btn_pdf', function() {
         $("#btn_export_excel").on("click", function () {
 
             $.ajax({
-                url: "../EXCEL/RP_RES_P.php",
+                url: "../EXCEL/RP_C_A_PZ.php",
                 type: "POST",
                 data: { data: JSON.stringify(llenar_tabla) },
                 xhrFields: { responseType: "blob" },
@@ -978,7 +991,7 @@ $(document).on('click', '#btn_pdf', function() {
                 success: function (blob) {
                     const link = document.createElement("a");
                     link.href = window.URL.createObjectURL(blob);
-                    link.download = "EC-HSE-F-53-RESIDUOS_PELIGROSOS.xls";
+                    link.download = "EC-HSE-F-53-AGUA-POZOS.xls";
                     link.click();
                 }
             });
@@ -987,3 +1000,127 @@ $(document).on('click', '#btn_pdf', function() {
 
 
 
+/// filtros 
+
+//// 
+
+function fil_mes(){
+  $.ajax({
+    url: '../DATABASE/cbx_mes_res_p.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mes').empty();
+        $('#cbx_fil_mes').append('<option value="">MES</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_mes+'">'+item.mes_res+'</option>';
+            $('#cbx_fil_mes').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+
+function cbx_fil_ag(){
+  $.ajax({
+    url: '../DATABASE/cg_agencia_cbx.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_ag').empty();
+        $('#cbx_fil_ag').append('<option value="">AGENCIA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_pro+'">'+item.proyecto+'</option>';
+            $('#cbx_fil_ag').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// cargar cbx maquina
+
+function cbx_fil_mq(){
+  $.ajax({
+    url: '../DATABASE/cbx_ma_res.php',
+    type: 'POST',
+    success: function(response){
+      var json = JSON.parse(response);
+      if(!json.err){
+        $('#cbx_fil_mq').empty();
+        $('#cbx_fil_mq').append('<option value="">MAQUINA</option>');
+        $.each(json, function(i,item){
+          if(i!="err"){
+            var option = '<option value="'+item.PK_maquina+'">'+item.serie_maquina+'</option>';
+            $('#cbx_fil_mq').append(option);
+          }
+        });
+      }
+    }
+  });
+}
+
+/// ejecucion del filtro 
+/// FILTROS
+
+function verificacar_filtro() {
+  
+/// vaibles de archivo y parametros de busqueda 
+  const url = '../DATABASE/fil_c_ag_pozos.php';
+  let params = {};
+
+
+  /// variables de busqueda
+  const mes    = $('#cbx_fil_mes').val();
+  const agencia   = $('#cbx_fil_ag').val();
+  const mq = $('#cbx_fil_mq').val(); 
+
+  const campo1 = $('#cbx_fil_mes').attr('name');
+  const campo2 = $('#cbx_fil_ag').attr('name');
+  const campo3 = $('#cbx_fil_mq').attr('name');
+
+
+  // Agregar filtros solo si tienen valor
+  if (mes) {
+    params.mes = mes;
+    params.campo1 = campo1;
+  }
+
+  if (agencia) {
+    params.agencia = agencia;
+    params.campo2 = campo2;
+  }
+ 
+  if (mq) {
+      params.mq = mq;
+      params.campo3 = campo3;
+    }
+
+
+  
+  // Validar que al menos un filtro esté seleccionado
+  if (Object.keys(params).length === 0) {
+    mensaje('Debes seleccionar al menos un filtro', 'warning');
+    return;
+  }
+  
+  console.log('Filtros enviados:', params);
+
+  c_aut_c_agua_pozos(url, params);
+
+}
+
+// ejecucion de la funcion filtar
+$('#btn_flt').click(function () {
+
+  verificacar_filtro(); 
+
+
+});
