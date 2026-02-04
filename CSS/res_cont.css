@@ -69,13 +69,13 @@ body{
 }
 
 #card_item {
- background: linear-gradient(135deg, #b5acf0, #f3e5c7);
+ background: linear-gradient(135deg, #170397, #dbf3c7);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 #card_item:hover {
- background: linear-gradient(135deg,  #edb334, #b5acf0);
+ background: linear-gradient(135deg,  #edb334, #0c0349);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);

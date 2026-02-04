@@ -84,6 +84,10 @@ function residuos_no_peligrosos (url,params){
               <button type="button" id="btn_edit" class="btn btn-warning btn-sm mb-1 mt-1">
                     <i class="fas fa-edit"></i>
               </button>
+              <button type="button" class="btn btn-info btn-sm mb-1 mt-1" id="btn_pdf">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button> 
+                
 
             <button type="button" id="btn_delete" class="btn btn-danger btn-sm mb-1 mt-1">
               <i class="fas fa-trash-alt"></i>
@@ -117,13 +121,8 @@ function residuos_no_peligrosos (url,params){
       }
       else{
 
-           Swal.fire({
-                icon: 'info',
-                title: json.mensaje,
-                text:  'No existen exámenes agendados.'
-                
-
-                })
+            mensaje(json.mensaje,'info')
+            
           }
     }
   })
@@ -1148,7 +1147,7 @@ $(document).on('click', '#btn_pdf', function() {
   }
 
   $.ajax({
-    url: '../PDF/bit_peligrosos.php',
+    url: '../PDF/bit_no_peligrosos.php',
     type: 'POST',
     data: { cp: JSON.stringify(cp) },
     xhrFields: { responseType: 'blob' },

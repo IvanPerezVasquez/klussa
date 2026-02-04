@@ -128,13 +128,8 @@ function c_aut_c_agua_sedes (url, params){
       }
       else{
 
-           Swal.fire({
-                icon: 'info',
-                title: 'Ningún dato encontrado',
-                text:  'No existen registros.'
-                
-
-                })
+             mensaje(json.mensaje,'info')
+             
           }
     }
   })

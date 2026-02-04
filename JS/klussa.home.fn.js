@@ -252,13 +252,13 @@ $.ajax({
 
 
 
-                <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="seccion_res_n_p">
+                <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="sec_adt">
                     <H3 class="py-3"> CONSUMO ADITIVOS </H3>
                     
                     <div class="card    shadow-lg roundle"  >
                         <img src="../IMAGE/ad.png" class="card-img-top p-4" alt="...">
                         <div class="card-body text-center d-grid gap-2">
-                            <button class="btn btn-lg  btn-warning " id="btn_res_n_p" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
+                            <button class="btn btn-lg  btn-warning " id="btn_adt" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
                         </div>
                     </div>
                 
@@ -281,6 +281,61 @@ $.ajax({
                 
                     </div>
 
+                     <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="sec_eng">
+                    <H3 class="py-3"> CONSUMO ENERGIA </H3>
+                    
+                    <div class="card    shadow-lg roundle"  >
+                        <img src="../IMAGE/eng.png" class="card-img-top p-4" alt="...">
+                        <div class="card-body text-center d-grid gap-2">
+                            <button class="btn btn-lg  btn-warning " id="btn_eng" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
+                        </div>
+                    </div>
+                
+                
+                
+                    </div>
+
+              <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="sec_proy">
+                    <H3 class="py-3">PROYECTOS </H3>
+                    
+                    <div class="card    shadow-lg roundle"  >
+                        <img src="../IMAGE/ag.png" class="card-img-top p-4" alt="...">
+                        <div class="card-body text-center d-grid gap-2">
+                            <button class="btn btn-lg  btn-warning " id="btn_proy" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
+                        </div>
+                    </div>
+                
+                
+                
+                    </div>
+             
+                 <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="sec_mq">
+                    <H3 class="py-3">MAQUINAS </H3>
+                    
+                    <div class="card    shadow-lg roundle"  >
+                        <img src="../IMAGE/mq.png" class="card-img-top p-4" alt="...">
+                        <div class="card-body text-center d-grid gap-2">
+                            <button class="btn btn-lg  btn-warning " id="btn_mq" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
+                        </div>
+                    </div>
+                
+                
+                
+                    </div>
+
+                            <div class="col-lg-3 col-md-12 col-sm-12 mt-4 op" id="sec_desh">
+                    <H3 class="py-3">DESECHOS </H3>
+                    
+                    <div class="card    shadow-lg roundle"  >
+                        <img src="../IMAGE/des.png" class="card-img-top p-4" alt="...">
+                        <div class="card-body text-center d-grid gap-2">
+                            <button class="btn btn-lg  btn-warning " id="btn_dsh" type="btn" ><i class="fas fa-th-list"></i> Ver Registros</button>
+                        </div>
+                    </div>
+                
+                
+                
+                    </div>
              
       
              
@@ -469,5 +524,89 @@ $(document).on('click','#sec_pz',function(event){
 
 
     location.href="../CONTROLLERS/CONSUMO-AGUA-POZOS.php";
+
+});
+
+
+//seccion adtivos
+$(document).on('click','#sec_adt',function(event){
+
+
+    location.href="../CONTROLLERS/CONSUMO-ADITIVOS.php";
+
+});
+// btn aditivos
+$(document).on('click','#btn_adt',function(event){
+
+
+   location.href="../CONTROLLERS/CONSUMO-ADITIVOS.php";
+
+});
+
+//seccion proyectos
+$(document).on('click','#sec_proy',function(event){
+
+
+    location.href="../CONTROLLERS/PROYECTOS.php";
+
+});
+// btn proyectos
+$(document).on('click','#btn_proy',function(event){
+
+
+   location.href="../CONTROLLERS/PROYECTOS.php";
+
+
+});
+
+//seccion energia
+$(document).on('click','#sec_eng',function(event){
+
+
+    location.href="../CONTROLLERS/CONSUMO-ENERGIA.php";
+
+});
+// btn energia
+$(document).on('click','#btn_eng',function(event){
+
+
+  
+    location.href="../CONTROLLERS/CONSUMO-ENERGIA.php";
+
+
+});
+
+//seccion maquinas
+$(document).on('click','#sec_mq',function(event){
+
+
+    location.href="../CONTROLLERS/MAQUINAS.php";
+
+});
+// btn maquinas
+$(document).on('click','#btn_mq',function(event){
+
+
+  
+location.href="../CONTROLLERS/MAQUINAS.php";
+
+
+
+});
+
+//seccion desechos
+$(document).on('click','#sec_desh',function(event){
+
+
+    location.href="../CONTROLLERS/GESTION_DESECHOS.php";
+
+});
+// btn desechos
+$(document).on('click','#btn_desh',function(event){
+
+
+  
+  location.href="../CONTROLLERS/GESTION_DESECHOS.php";
+
 
 });

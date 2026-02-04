@@ -431,3 +431,4 @@ $(document).on('click','#c_en_sedes_btn',function(event){
 $(document).on('click','#btn_c_ad',function(event){
     location.href="../CONTROLLERS/CONSUMO-ADITIVOS.php";
 });
+

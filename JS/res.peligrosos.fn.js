@@ -83,6 +83,9 @@ function c_aut_des_p (url,params){
                   <button type="button" class="btn btn-warning btn-sm mb-1 mt-1" id="btn_edit">
                     <i class="fas fa-edit"></i>
                   </button> 
+                 <button type="button" class="btn btn-info btn-sm mb-1 mt-1" id="btn_pdf">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button> 
                 
                   <button type="button" id="btn_delete" class="btn btn-danger btn-sm mb-1 mt-1">
                     <i class="fas fa-trash-alt"></i>
