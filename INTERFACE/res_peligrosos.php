@@ -52,7 +52,7 @@
                 <i class="fa-solid fa-dumpster-fire"></i> Registrar
               </button>
 
-              <button id="btn_pdf_g" class="btn btn-sm btn-outline-danger">
+              <button id="btn_pdf__rp" class="btn btn-sm btn-outline-danger">
                PDF <i class="fas fa-file-pdf"></i>
               </button>
 

@@ -670,7 +670,7 @@ var footer = `
 
 
  <div class="col-md-6 col-12">
-      <button type="button" class="btn btn-outline-info  w-100" id="btn_pdf">
+      <button type="button" class="btn btn-outline-info  w-100" id="btn_pdf_in">
       <i class="fas fa-file-pdf"></i> Imprimir
       </button>
     </div>
@@ -694,6 +694,56 @@ $('#titulo_modal').append(title);
 
 $('#form_modal_footer').append(footer);
 });
+
+
+
+$(document).on('click', '#btn_pdf_in', function () {
+
+  let cp = llenar_tabla.find(item => item.id == parseInt(pk_registro));
+
+  console.log(cp);
+
+  if (!cp) {
+    console.error('No se encontró el registro');
+    return;
+  }
+
+  $.ajax({
+    url: '../PDF/c_agua_sedes_in.php',
+    type: 'POST',
+    data: {
+      cp: JSON.stringify(cp) // 👈 CLAVE
+    },
+    xhrFields: {
+      responseType: 'blob'
+    },
+    success: function (blob) {
+
+      if (blob.size === 0) {
+        alert('Error: PDF vacío o contenido inválido');
+        return;
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'EC-HSE-F-53-CONSUMO-INDIVIDUAL.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    },
+    error: function (xhr, status, error) {
+      console.error('Error AJAX:', error, xhr.responseText);
+    }
+  });
+
+});
+
+
+
+
+
 
 
 

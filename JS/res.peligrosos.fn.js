@@ -1050,6 +1050,50 @@ $(document).on('click', '#btn_pdf', function() {
 
 
 
+
+
+// generacion de pdf
+$(document).on('click', '#btn_pdf__rp', function() {
+
+
+
+
+
+  if(!  llenar_tabla){
+   console.error('No se encontró el registro c');
+    return;
+  }
+
+  $.ajax({
+    url: '../PDF/rp_des_p.php',
+    type: 'POST',
+    data: { cp: JSON.stringify(  llenar_tabla) },
+    xhrFields: { responseType: 'blob' },
+    success: function(blob) {
+      if(blob.size === 0){
+        alert('Error: PDF vacío o contenido inválido');
+        return;
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'EC-HSE-F-53-RESIDUOS_PELIGROSOS.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    },
+    error: function(xhr, status, error){
+      console.error('Error AJAX:', error);
+    }
+  });
+
+});
+
+
+
+
 /// editar imputs 
 
 $(document).on('click', '#edit', function() {

@@ -16,7 +16,7 @@ $t_res = $_POST['cbx_t_res'];
 
 
 
-$busqueda = "SELECT * FROM residuos where code_res = '$code_res' ";
+$busqueda = "SELECT * FROM residuos where code_res = '$code_res' and FK_clf_res = 1 ";
 
 $bs = mysqli_query($con, $busqueda);
 

@@ -6,153 +6,162 @@ if (!isset($_POST['cp'])) die('Sin datos');
 $data = json_decode($_POST['cp'], true);
 if (!is_array($data) || count($data) === 0) die('Datos inválidos');
 
-/* ===== ORDENAR POR FECHA ===== */
-usort($data, function($a, $b) {
-    return strtotime($a['fr']) <=> strtotime($b['fr']);
-});
+/* ================= ORDENAR ================= */
+usort($data, fn($a,$b)=>strtotime($a['fr']) <=> strtotime($b['fr']));
 
-/* ===== AGRUPAR POR MES ===== */
+/* ================= AGRUPAR ================= */
 $mensual = [];
 foreach ($data as $r) {
     $mes = $r['mes'];
-
     if (!isset($mensual[$mes])) {
-        $mensual[$mes] = [
-            'mes' => $mes,
-            'kg'  => 0,
-            'lt'  => 0
-        ];
+        $mensual[$mes] = ['mes'=>$mes,'kg'=>0,'lt'=>0];
     }
-
     $mensual[$mes]['kg'] += (float)$r['kg'];
     $mensual[$mes]['lt'] += (float)$r['lt'];
 }
 $mensual = array_values($mensual);
 
-/* ===== AGRUPAR POR PROYECTO ===== */
-$proyectos = [];
-foreach ($data as $r) {
-    $pro = $r['pro'];
-    if (!isset($proyectos[$pro])) {
-        $proyectos[$pro] = ['kg'=>0,'lt'=>0];
+/* ================= PDF ================= */
+class PDF extends FPDF {
+
+    function Header(){
+        // Fondo encabezado
+        $this->SetFillColor(245,247,250);
+        $this->Rect(0,0,210,32,'F');
+
+        // Logo LOCAL
+        $logo = __DIR__ . '/../IMAGE/kde.png';
+        if (file_exists($logo)) {
+            $this->Image($logo,12,6,22);
+        }
+
+        // Título
+        $this->SetFont('Arial','B',14);
+        $this->SetXY(40,8);
+        $this->Cell(130,8,utf8_decode('BITÁCORA DE GESTIÓN AMBIENTAL'),0,2,'C');
+
+        // Subtítulo
+        $this->SetFont('Arial','',10);
+        $this->Cell(130,6,utf8_decode('CONTROL DE CONSUMO DE ADITIVOS'),0,0,'C');
+
+        // Código
+        $this->SetFont('Arial','I',8);
+        $this->SetXY(170,8);
+        $this->MultiCell(35,4,"EC-HSE-F-53\nREV-4\nENE-2024",0,'R');
+
+        // Línea
+        $this->SetDrawColor(180);
+        $this->Line(10,32,200,32);
+
+        $this->Ln(15);
     }
-    $proyectos[$pro]['kg'] += (float)$r['kg'];
-    $proyectos[$pro]['lt'] += (float)$r['lt'];
+
+    function Section($title){
+        $this->Ln(3);
+        $this->SetFillColor(0,32,96);
+        $this->SetTextColor(255);
+        $this->SetFont('Arial','B',11);
+        $this->Cell(0,8,utf8_decode("  $title"),0,1,'L',true);
+        $this->SetTextColor(0);
+        $this->Ln(2);
+    }
+
+    function Card($x,$y,$w,$h,$title,$value){
+        $this->SetFillColor(245,247,250);
+        $this->Rect($x,$y,$w,$h,'F');
+        $this->SetDrawColor(220);
+        $this->Rect($x,$y,$w,$h);
+
+        $this->SetFont('Arial','',9);
+        $this->SetXY($x+5,$y+5);
+        $this->Cell($w-10,5,utf8_decode($title),0,2,'C');
+
+        $this->SetFont('Arial','B',14);
+        $this->Cell($w-10,8,$value,0,0,'C');
+    }
 }
 
 /* ================= FUNCIONES ================= */
+function chartMensual($pdf,$data){
+    $x=20; $y=90; $w=170; $h=70;
+    $max = max(array_column($data,'kg')) ?: 1;
 
-function headerGeneral($pdf){
-    $pdf->SetFont('Arial','B',14);
-    $pdf->SetFillColor(230,240,255);
-
-    $pdf->Cell(40,20,'',1,0,'C',true);
-    $pdf->Cell(110,20,utf8_decode('BITÁCORA DE GESTIÓN AMBIENTAL'),1,0,'C',true);
-    $pdf->Cell(40,20,'',1,1,'C',true);
-
-    if (file_exists('../IMAGE/kluane.png')) {
-        $pdf->Image('../IMAGE/kluane.png',15,12,22);
-    }
-
-    $pdf->SetFont('Arial','I',9);
-    $pdf->SetXY(160,15);
-    $pdf->Cell(35,5,'EC-HSE-F-53',0,1,'C');
-    $pdf->SetXY(160,20);
-    $pdf->Cell(35,5,'REV-4 ENE-2024',0,1,'C');
-}
-
-function section($pdf,$title){
-    $pdf->Ln(4);
-    $pdf->SetFillColor(33,37,41);
-    $pdf->SetTextColor(255);
-    $pdf->SetFont('Arial','B',12);
-    $pdf->Cell(0,8,utf8_decode("  ".$title),1,1,'L',true);
-    $pdf->SetTextColor(0);
-    $pdf->Ln(2);
-}
-
-function drawChartMensual($pdf,$data,$x=20,$y=70,$w=170,$h=60){
-    $max = max(array_column($data,'kg'));
-    if ($max <= 0) $max = 1;
-
-    $gap = 4;
-    $barW = ($w - (count($data)+1)*$gap) / count($data);
+    $gap=6;
+    $bw = ($w-(count($data)+1)*$gap)/count($data);
 
     $pdf->Line($x,$y,$x,$y+$h);
     $pdf->Line($x,$y+$h,$x+$w,$y+$h);
 
     foreach($data as $i=>$r){
         $bh = ($r['kg']/$max)*($h-10);
-        $bx = $x + $gap + $i*($barW+$gap);
+        $bx = $x+$gap+$i*($bw+$gap);
         $by = $y+$h-$bh;
 
-        $pdf->SetFillColor(52,152,219);
-        $pdf->Rect($bx,$by,$barW,$bh,'F');
+        $pdf->SetFillColor(0,112,192);
+        $pdf->Rect($bx,$by,$bw,$bh,'F');
 
         $pdf->SetFont('Arial','',8);
         $pdf->SetXY($bx,$y+$h+2);
-        $pdf->MultiCell($barW,4,$r['mes'],0,'C');
+        $pdf->Cell($bw,4,$r['mes'],0,0,'C');
     }
-
-    $pdf->SetFont('Arial','B',10);
-    $pdf->SetXY($x,$y-8);
-    $pdf->Cell($w,6,'Consumo mensual total (KG)',0,0,'C');
 }
 
 function tablaMensual($pdf,$data){
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(60,8,'Mes',1);
-    $pdf->Cell(60,8,'Total KG',1);
-    $pdf->Cell(60,8,'Total LT',1,1);
+    $pdf->SetFillColor(230,235,245);
+    $pdf->Cell(70,8,'MES',1,0,'C',true);
+    $pdf->Cell(60,8,'TOTAL KG',1,0,'C',true);
+    $pdf->Cell(60,8,'TOTAL LT',1,1,'C',true);
 
+    $fill=false;
     foreach($data as $r){
+        $pdf->SetFillColor(245,247,250);
         $pdf->SetFont('Arial','',10);
-        $pdf->Cell(60,8,$r['mes'],1);
-        $pdf->Cell(60,8,number_format($r['kg'],2),1,0,'C');
-        $pdf->Cell(60,8,number_format($r['lt'],2),1,1,'C');
+        $pdf->Cell(70,8,$r['mes'],1,0,'C',$fill);
+        $pdf->Cell(60,8,number_format($r['kg'],2),1,0,'R',$fill);
+        $pdf->Cell(60,8,number_format($r['lt'],2),1,1,'R',$fill);
+        $fill=!$fill;
     }
 }
 
-/* ================= PDF ================= */
-
-$pdf = new FPDF('P','mm','A4');
-$pdf->SetAutoPageBreak(true,25);
+/* ================= GENERAR ================= */
+$pdf = new PDF();
+$pdf->SetAutoPageBreak(true,20);
 
 /* ===== RESUMEN ===== */
 $pdf->AddPage();
-headerGeneral($pdf);
 
-$pdf->Ln(25);
-$pdf->SetFont('Arial','B',12);
-$pdf->Cell(0,8,utf8_decode('CONTROL DE CONSUMO DE ADITIVOS'),0,1,'L');
+$totalKg = array_sum(array_column($mensual,'kg'));
+$totalLt = array_sum(array_column($mensual,'lt'));
 
-drawChartMensual($pdf,$mensual);
-$pdf->Ln(75);
+$pdf->Card(20,45,50,25,'TOTAL KG',number_format($totalKg,2));
+$pdf->Card(80,45,50,25,'TOTAL LT',number_format($totalLt,2));
+$pdf->Card(140,45,50,25,'REGISTROS',count($data));
 
-section($pdf,'RESUMEN MENSUAL');
+chartMensual($pdf,$mensual);
+
+$pdf->Ln(85);
+$pdf->Section('RESUMEN MENSUAL');
 tablaMensual($pdf,$mensual);
 
 /* ===== DETALLE ===== */
 foreach($data as $r){
     $pdf->AddPage();
-    headerGeneral($pdf);
+    $pdf->Section('DETALLE DE REGISTRO');
 
-    section($pdf,'DETALLE DE REGISTRO');
     $pdf->SetFont('Arial','',10);
-
-    $pdf->Cell(60,8,'Fecha:',0);      $pdf->Cell(0,8,$r['fr'],0,1);
-    $pdf->Cell(60,8,'Mes:',0);        $pdf->Cell(0,8,$r['mes'],0,1);
-    $pdf->Cell(60,8,'Maquina:',0);    $pdf->Cell(0,8,$r['mq'],0,1);
-    $pdf->Cell(60,8,'Pozo:',0);       $pdf->Cell(0,8,$r['pz'],0,1);
-    $pdf->Cell(60,8,'Aditivo:',0);    $pdf->Cell(0,8,$r['ad'],0,1);
-    $pdf->Cell(60,8,'Consumo KG:',0); $pdf->Cell(0,8,$r['kg'],0,1);
-    $pdf->Cell(60,8,'Consumo LT:',0); $pdf->Cell(0,8,$r['lt'],0,1);
-    $pdf->Cell(60,8,'Proyecto:',0);   $pdf->Cell(0,8,$r['pro'],0,1);
-    $pdf->Cell(60,8,'Responsable:',0);$pdf->Cell(0,8,$r['rp'],0,1);
+    foreach([
+        'Fecha'=>$r['fr'],'Mes'=>$r['mes'],'Máquina'=>$r['mq'],
+        'Pozo'=>$r['pz'],'Aditivo'=>$r['ad'],
+        'Consumo KG'=>$r['kg'],'Consumo LT'=>$r['lt'],
+        'Proyecto'=>$r['pro'],'Responsable'=>$r['rp']
+    ] as $k=>$v){
+        $pdf->Cell(60,8,$k.':',0,0);
+        $pdf->Cell(0,8,$v,0,1);
+    }
 }
 
 /* ===== SALIDA ===== */
 header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="REPORTE_CONSUMO_ADITIVOS.pdf"');
-$pdf->Output('I');
+$pdf->Output('I','REPORTE_CONSUMO_ADITIVOS.pdf');
 exit;

@@ -12,6 +12,7 @@ require('conexion.php');
 
 
 
+
   $query="SELECT * FROM planes, sub_plan  WHERE planes.PK_plan  = sub_plan.FK_plan  ";
 
 	$result = mysqli_query($con,$query); 

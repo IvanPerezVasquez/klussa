@@ -587,6 +587,8 @@ function armar_formulario(ficha, footer){
 
 
 /// turno dia 
+  pk_registro = 0;
+
 
       $(document).on('click', '#btn_t_dia', function() {
 
@@ -714,7 +716,7 @@ function armar_formulario(ficha, footer){
 
 
           <div class="col-md-6 col-12">
-            <button type="button" class="btn btn-outline-info w-100" id="btn_gurdar_dia">
+            <button type="button" class="btn btn-outline-info w-100" id="btn_pdf">
           <i class="fas fa-file-pdf"></i> Generar PDF
             </button>
           </div>
@@ -747,25 +749,29 @@ function armar_formulario(ficha, footer){
 
 // generacion de pdf
 
-$(document).on('click', '#btn_pdf', function() {
+$(document).on('click', '#btn_pdf', function () {
 
-    var delete_info = $(this)[0].parentElement;
-    id = $(delete_info).attr("id");
+  let cp = llenar_tabla.find(item => item.id == parseInt(pk_registro));
 
-  let cp = llenar_tabla.find(item => item.id == parseInt(id));
+  console.log(cp);
 
-  if(!cp){
-   console.error('No se encontró el registro c');
+  if (!cp) {
+    console.error('No se encontró el registro');
     return;
   }
 
   $.ajax({
-    url: '../PDF/c_energia_rp.php',
+    url: '../PDF/c_agua_sedes_in.php',
     type: 'POST',
-    data: { cp: JSON.stringify(cp) },
-    xhrFields: { responseType: 'blob' },
-    success: function(blob) {
-      if(blob.size === 0){
+    data: {
+      cp: JSON.stringify(cp) // 👈 CLAVE
+    },
+    xhrFields: {
+      responseType: 'blob'
+    },
+    success: function (blob) {
+
+      if (blob.size === 0) {
         alert('Error: PDF vacío o contenido inválido');
         return;
       }
@@ -779,8 +785,8 @@ $(document).on('click', '#btn_pdf', function() {
       a.remove();
       window.URL.revokeObjectURL(url);
     },
-    error: function(xhr, status, error){
-      console.error('Error AJAX:', error);
+    error: function (xhr, status, error) {
+      console.error('Error AJAX:', error, xhr.responseText);
     }
   });
 
