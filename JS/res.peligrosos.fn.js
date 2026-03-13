@@ -215,14 +215,15 @@ $('#form_modal_footer').empty('');
       <div class="row g-3">
 
         <div class="col-md-6">
+          <label for="cbx_mes" class="form-label small fw-semibold text-muted">Mes</label>
+          <select class="form-select form-select-sm"  id="cbx_mes_res" name="cbx_mes"></select>
+        </div>
+
+        <div class="col-md-6">
           <label for="fecha_entrega" class="form-label small fw-semibold text-muted">Fecha de entrega</label>
           <input type="date" class="form-control form-control-sm" id="fecha_entrega" name="fecha_entrega" >
         </div>
 
-        <div class="col-md-6">
-          <label for="cbx_mes" class="form-label small fw-semibold text-muted">Mes</label>
-          <select class="form-select form-select-sm"  id="cbx_mes_res" name="cbx_mes"></select>
-        </div>
 
         <div class="col-md-6">
           <label for="cbx_res" class="form-label small fw-semibold text-muted">Código</label>
@@ -343,10 +344,32 @@ $('#form_modal_footer').append(footer);
 
 
 }
+///// funcion carga de fecha automatica al seleccionar el mes
+
+
+$(document).on('change', '#cbx_mes_res', function() {
+ 
+   mes =  this.value; 
+
+   let an = new Date().getFullYear(); // año actual
+
+    mes = mes.padStart(2, '0'); // 01,02,03...
+
+    console.log('Mes seleccionado:', mes); // Verificar el valor del mes seleccionado 
+    
+    if(mes !== ''){ im_fc = an + '-' + mes + '-01';  
+        
+        $('#fecha_entrega').val(im_fc);
+
+     } else { mensaje('Selecciona un mes', 'warning'); }
+
+});
 
 
 
 
+
+///
 function cbx_mes_res(){
   $.ajax({
     url: '../DATABASE/cbx_mes_res_p.php',
