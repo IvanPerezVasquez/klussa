@@ -74,10 +74,16 @@ function c_aut_des_p (url,params){
                 <td>${item.mes_res}</td>
                 <td>${item.fc_disp}</td>
                 <td>${item.code_res}</td>
+               
+                <td> <span class="badge text-white bg-success p-2">${item.ct_kg}</span></td>
+                <td><span class="badge text-white bg-success p-2">${item.ct_lit}</span></td>
+                <td><span class="badge text-white bg-success p-2" >${item.ct_gl}</span></td>
+                <td><span class="badge text-white bg-success p-2">${item.ct_tn}</span></td>
                 <td>${item.proyecto}</td>
                 <td>${item.clf_sis_r}</td>
                 <td>${item.gestor_res}</td>
                 <td>${item.resp_des}</td>
+                <td><span class="badge text-white bg-danger p-2">$ ${item.ct_total_des} .00</span></td>
                 <td id="${item.PK_disp}">
                  
                   <button type="button" class="btn btn-warning btn-sm mb-1 mt-1" id="btn_edit">
@@ -257,17 +263,17 @@ $('#form_modal_footer').empty('');
 
         <div class="col-md-6">
           <label for="ct_ton" class="form-label small fw-semibold text-muted">Cantidad (ton)</label>
-          <input type="text" class="form-control form-control-sm" id="ct_ton" name="ct_ton" placeholder="Toneladas" readonly>
+          <input type="text" class="form-control form-control-sm" id="ct_ton" name="ct_ton" placeholder="Toneladas" >
         </div>
 
         <div class="col-md-6">
           <label for="ct_lt" class="form-label small fw-semibold text-muted">Cantidad (L)</label>
-          <input type="text" class="form-control form-control-sm" id="ct_lt" name="ct_lt" placeholder="Litros" readonly>
+          <input type="text" class="form-control form-control-sm" id="ct_lt" name="ct_lt" placeholder="Litros" >
         </div>
 
         <div class="col-md-6">
           <label for="ct_gl" class="form-label small fw-semibold text-muted">Cantidad (gal)</label>
-          <input type="text" class="form-control form-control-sm" id="ct_gl" name="ct_gl" placeholder="Galones" readonly>
+          <input type="text" class="form-control form-control-sm" id="ct_gl" name="ct_gl" placeholder="Galones" >
         </div>
 
         <div class="col-md-6">
@@ -289,7 +295,14 @@ $('#form_modal_footer').empty('');
           <label for="cargo" class="form-label small fw-semibold text-muted">Cargo</label>
           <input type="text" class="form-control form-control-sm" id="cargo" name="cargo" placeholder="Cargo del Responsable">
         </div>
-
+         <div class="col-md-3">
+          <label for="ct_trans" class="form-label small fw-semibold text-muted">$ Transporte</label>
+          <input type="number" class="form-control form-control-sm" id="ct_trans" name="ct_trans" placeholder="Costo del Transporte">
+        </div>
+        <div class="col-md-3">
+          <label for="ct_gest" class="form-label small fw-semibold text-muted">$ Gestor</label>
+          <input type="number" class="form-control form-control-sm" id="ct_gest" name="ct_gest" placeholder="Costo del Gestor">
+        </div>
         <div class="col-12">
           <label for="desc_dispo" class="form-label small fw-semibold text-muted">Descripción Disposición</label>
           <textarea class="form-control form-control-sm" rows="3" id="desc_dispo" name="desc_dispo" placeholder="Descripción de la disposición"></textarea>
@@ -657,7 +670,8 @@ $(document).on('click', '#btn_registro', function () {
   const responsable = $('#responsable').val().trim();
   const cargo = $('#cargo').val().trim();
   const descrip = $('#desc_dispo').val().trim(); //  valor de  la  descripcion  del  residuo
-  
+  const ct_trans = $('#ct_trans').val().trim(); // costo transporte
+  const ct_gest = $('#ct_gest').val().trim(); // costo gestor 
   /// validdacion, si los campos estan vacios
 
 
@@ -675,19 +689,22 @@ $(document).on('click', '#btn_registro', function () {
   if (responsable === '') return mensaje('Ingresa el nombre del responsable', 'warning');
   if (cargo === '') return mensaje('Ingrese su cargo', 'warning');
   if (descrip === '') return mensaje('Ingrese una descripcion', 'warning');
+
+  if (ct_trans === '' ) return mensaje('Ingresa el costo del transporte,  si no aplica ingresa 0', 'info');
+  if (ct_gest === '' ) return mensaje('Ingresa el costo del gestor,  si no aplica ingresa 0', 'info');
 ///  ingreso del  registro, 
 
  $.ajax({
     url: '../DATABASE/insert_reg_p.php',
     type: 'POST',
-    data: { fechaEntrega, mes, codigo, agencia, ub, mq, kg, ton, lt, gl, gestora, responsable,manifesto, cargo, descrip },
+    data: { fechaEntrega, mes, codigo, agencia, ub, mq, kg, ton, lt, gl, gestora, responsable,manifesto, cargo, descrip, ct_gest, ct_trans },
     
     beforeSend: function () {
       mensaje('Enviando datos...', 'info');
       $('#btn_registro').prop('disabled', true);
     },
     success: function (response) {
-     
+     console.log(response);
        var json = JSON.parse(response);
     
         if(!json.err){  mensaje(json.mensaje,'success');     c_aut_des_p(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}
@@ -974,6 +991,22 @@ var title = `
             <label class="form-label fw-semibold">Cargo</label>
             <div class="input-group input-group-sm mb-2">
               <input type="text" class="form-control" id="cargo" value="${cp.cargo}" readonly>
+              <button class="btn btn-sm bg-transparent border-0" type="button" id="edit"><i class="fa-solid fa-pencil"></i></button>
+            </div>
+          </div>
+
+           <div class="col-md-3">
+            <label class="form-label fw-semibold">$ Gestor</label>
+            <div class="input-group input-group-sm mb-2">
+              <input type="text" class="form-control" id="ct_gestor_des" value="${cp.ct_gestor_des}" readonly>
+              <button class="btn btn-sm bg-transparent border-0" type="button" id="edit"><i class="fa-solid fa-pencil"></i></button>
+            </div>
+          </div>
+
+           <div class="col-md-3">
+            <label class="form-label fw-semibold">$ Transporte</label>
+            <div class="input-group input-group-sm mb-2">
+              <input type="text" class="form-control" id="ct_trasporte_des" value="${cp.ct_trasporte_des}" readonly>
               <button class="btn btn-sm bg-transparent border-0" type="button" id="edit"><i class="fa-solid fa-pencil"></i></button>
             </div>
           </div>
