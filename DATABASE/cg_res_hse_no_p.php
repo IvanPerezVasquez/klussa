@@ -67,7 +67,9 @@ if($result){
                            'ct_tn'             => $row['ct_tn'],
                            'ct_lit'            => $row['ct_lit'],
                            'ct_gl'             => $row['ct_gl'],
-                          
+                           'ct_total_des'      => $row['ct_total_des'],
+                           'ct_gestor_des'      => $row['ct_gestor_des'],
+                           'ct_trasporte_des'   => $row['ct_trasporte_des'],
                            'gestor_res'        => $row['gestor_res'],
                            'mes_res'           => $row['mes_res'],
                            'clf_sis_r'         => $row['clf_sis_r'],

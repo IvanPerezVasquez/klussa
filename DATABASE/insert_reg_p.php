@@ -19,6 +19,7 @@ require('../CONFIG/sys.res.con.php');
     $descrip      = $_POST['descrip'];
     $ct_trans     = $_POST['ct_trans'];
     $ct_gest      = $_POST['ct_gest'];
+    
 
     $total = $ct_gest + $ct_trans; // Costo total sumando transporte y gestor
 

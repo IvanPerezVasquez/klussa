@@ -1,5 +1,5 @@
 <?php
-require_once 'conexion.php';
+require('../CONFIG/sys.res.con.php');
 
 /* ================================
    1. DATOS DEL FORMULARIO
@@ -12,6 +12,18 @@ $maquina     = $_POST['maquina']     ?? '';
 $ubicacion   = $_POST['ubicacion']   ?? '';
 $pozo        = $_POST['pozo']        ?? '';
 $responsable = $_POST['responsable'] ?? '';
+$dia_ini = $_POST['dia_ini'] ?? '';
+$dia_fin = $_POST['dia_fin'] ?? '';
+$dia_m_c = $_POST['cdia'] ?? '';
+$dia_litros = $_POST['d_li'] ?? '';
+$noche_ini = $_POST['noche_ini'] ?? '';
+$noche_fin = $_POST['noche_fin'] ?? '';
+$noche_m_c = $_POST['cnoche'] ?? '';
+$noche_litros = $_POST['n_li'] ?? '';
+
+
+$t_mc = $dia_m_c + $noche_m_c;
+$t_li = $dia_litros + $noche_litros;
 
 /* ================================
    2. VALIDAR CAMPOS OBLIGATORIOS
@@ -88,12 +100,12 @@ $insert = "
         '$maquina',
         '$ubicacion',
         '$pozo',
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        '$dia_ini',
+        '$dia_fin',
+        '$noche_ini',
+        '$noche_fin',
+        '$t_mc',
+        '$t_li',
         '$agencia',
         '$responsable'
     )

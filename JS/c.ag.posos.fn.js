@@ -82,6 +82,15 @@ function c_aut_c_agua_pozos (url, params){
                
                 <td>${item.fi}</td>
                 <td>${item.fn}</td>
+
+                <td>${item.dia_ini}</td>
+                <td>${item.dia_fin}</td>
+
+                <td>${item.noche_ini}</td>
+                <td>${item.noche_fin}</td>
+
+
+
                 <td>  <span class="badge bg-success-subtle text-success">${item.gal}</span></td>
                 <td> <span class="badge bg-primary-subtle text-primary">${item.litros}</span></td>
              
@@ -209,81 +218,144 @@ $('#modal').modal('show');
       `;
 
         var form =`
-        
-      <form id="detalle_residuo" class="container-fluid py-2">
+<form id="detalle_residuo" class="container-fluid py-3">
 
-        <div class="card border-0 shadow-sm">
-          <div class="card-body">
+  <!-- ================= DATOS GENERALES ================= -->
+  <div class="card border-0 shadow-sm g-4 mb-4">
+   
+     <div class="card-header bg-secondary text-white fw-semibold ">
+     Infromacion General
+    </div>
 
-            <!-- ================= DATOS GENERALES ================= -->
-            <div class="mb-3">
-              <h6 class="fw-bold text-dark mb-3">
-                <i class="fa-solid fa-database me-1"></i> Registro |  Pozos
-              </h6>
+    <div class="card-body">
+      <div class="row g-4">
 
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Fecha Inicio</label>
-                  <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio">
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Fecha Cierre</label>
-                  <input type="date" class="form-control form-control-sm" id="fecha_cierre" name="fecha_cierre">
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Mes</label>
-                  <select class="form-select form-select-sm" id="cbx_mes_res"  name="cbx_mes_res"></select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Agencia</label>
-                  <select class="form-select form-select-sm" id="cbx_agencia" name="cbx_agencia"></select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Maquina</label>
-                  <select class="form-select form-select-sm" id="cbx_maquina" name="cbx_maquina"></select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Ubicación</label>
-                  <select class="form-select form-select-sm" id="cbx_ubicacion" name="cbx_ubicacion"></select>
-                </div>
-
-            
-
-          
-              </div>
-            </div>
-
-
-      
-
-            <!-- ================= RESPONSABLE ================= -->
-            <div class="row g-3">
-
-            
-              <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted">Pozo</label>
-                  <input type="text" class="form-control form-control-sm" id="pozo" name="pozo" placeholder="Pozo A, Pozo B, etc.">
-                </div>
-
-              <div class="col-md-6">
-                <label class="form-label small fw-semibold text-muted">Responsable</label>
-                <input type="text" class="form-control form-control-sm" name="responsable" id="resposable" placeholder="Katty Conforme">
-              </div>
-
-
-            </div>
-
-          </div>
+         <div class="col-md-6">
+          <label class="form-label small text-muted">Mes</label>
+          <select class="form-select form-select-sm" id="cbx_mes_res" name="cbx_mes_res"></select>
         </div>
 
-      </form>
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Agencia</label>
+          <select class="form-select form-select-sm" id="cbx_agencia" name="cbx_agencia"></select>
+        </div>
 
 
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Fecha Inicio</label>
+          <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Fecha Cierre</label>
+          <input type="date" class="form-control form-control-sm" id="fecha_cierre" name="fecha_cierre">
+        </div>
+
+     
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Máquina</label>
+          <select class="form-select form-select-sm" id="cbx_maquina" name="cbx_maquina"></select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Ubicación</label>
+          <select class="form-select form-select-sm" id="cbx_ubicacion" name="cbx_ubicacion"></select>
+        </div>
+
+        <div class="col-md-12">
+          <label class="form-label small text-muted">Pozo</label>
+          <input type="text" class="form-control form-control-sm" id="pozo" name="pozo">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TURNO DIA ================= -->
+  <div class="card shadow-sm g-4 mb-4">
+    <div class="card-header bg-success text-white fw-semibold ">
+      Consumo de Agua – Turno Día
+    </div>
+
+    <div class="card-body">
+      <div class="row g-4">
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Inicio</label>
+          <input type="number" id="dia_ini" class="form-control form-control-sm" name="dia_inicio">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Fin</label>
+          <input type="number" id="dia_fin" class="form-control form-control-sm" name="dia_fin">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Consumo (m³)</label>
+          <input type="text" class="form-control form-control-sm bg-light text-center fw-bold" id="dia_consumo" name="dia_consumo" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Consumo (L)</label>
+          <input type="text" class="form-control form-control-sm bg-light text-center fw-bold" id="dia_litros" name="dia_litros" readonly>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TURNO NOCHE ================= -->
+  <div class="card  shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-dark text-white fw-semibold ">
+      Consumo de Agua – Turno Noche
+    </div>
+
+    <div class="card-body">
+      <div class="row g-4">
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Inicio</label>
+          <input type="number" id="noche_inicio" class="form-control form-control-sm" name="noche_inicio">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Fin</label>
+          <input type="number" id="noche_fin" class="form-control form-control-sm" name="noche_fin">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Consumo (m³)</label>
+          <input type="text" class="form-control form-control-sm bg-light text-center fw-bold" id="noche_consumo" name="noche_consumo" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small text-muted">Consumo (L)</label>
+          <input type="text" class="form-control form-control-sm bg-light text-center fw-bold" id="noche_litros" name="noche_litros" readonly>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESPONSABLE ================= -->
+  <div class="card shadow-sm rounded-4">
+    <div class="card-header bg-secondary text-white fw-semibold ">
+      Responsable
+    </div>
+
+    <div class="card-body">
+      <div class="row g-4">
+
+        <div class="col-md-12">
+          <label class="form-label small text-muted">Responsable</label>
+          <input type="text" class="form-control form-control-sm" name="responsable" id="resposable">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</form>
         
         
         
@@ -327,6 +399,30 @@ $('#modal').modal('show');
 
       }
 
+/// funcion para  fechas automatico y  carga de cbx
+
+$(document).on('change', '#cbx_mes_res', function() {
+ 
+   mes =  this.value; 
+
+   let an = new Date().getFullYear(); // año actual
+
+    mes = mes.padStart(2, '0'); // 01,02,03...
+
+    console.log('Mes seleccionado:', mes); // Verificar el valor del mes seleccionado 
+    
+    if(mes !== ''){ 
+       
+        fc_in = an + '-' + mes + '-01';  
+        fc_fn = an + '-' + mes + '-28';  
+
+
+        $('#fecha_inicio').val(fc_in);
+        $('#fecha_cierre').val(fc_fn);
+
+     } else { mensaje('Selecciona un mes', 'warning'); }
+
+});
 
 
 
@@ -444,6 +540,19 @@ $(document).on('click', '#btn_registro', function () {
     const ubicacion = $('#cbx_ubicacion').val().trim();
     const pozo = $('#pozo').val().trim();
     const responsable = $('#resposable').val().trim();
+// dia 
+     const dia_ini = $('#dia_ini').val().trim();
+     const dia_fin = $('#dia_fin').val().trim();
+     const cdia = $('#dia_consumo').val().trim();
+     const d_li = $('#dia_litros').val().trim();
+
+// noche
+      const noche_ini = $('#noche_inicio').val().trim();
+      const noche_fin = $('#noche_fin').val().trim();
+      const cnoche = $('#noche_consumo').val().trim();
+      const n_li = $('#noche_litros').val().trim();
+
+  
 
  //  valor de  la  descripcion  del  residuo
   
@@ -459,10 +568,22 @@ $(document).on('click', '#btn_registro', function () {
     if(pozo.length === 0 ) return mensaje('El pozo es obligatorio','warning');
     if(responsable.length === 0 ) return mensaje('El responsable es obligatorio','warning');
 
+    ///consumo dia - validaciones
+        if(!dia_ini || !dia_fin ) return mensaje('La lectura del turno dia no puede ser en blanco, por favor ingrese un valor', 'info');
+       
+        if(dia_ini < 0) return mensaje('La lectura inicial no puede ser negativa | Turno Dia', 'warning');
+        if(dia_fin < 0) return mensaje('La lectura final no puede ser negativa | Turno Dia', 'warning');
+        if(cdia < 0) return mensaje('El consumo no puede ser negativo | Turno Dia', 'warning');
+        if(d_li < 0) return mensaje('Los litros no pueden ser negativos | Turno Dia', 'warning');
 
+    /// consumo noche - validaciones 
 
+      if(!noche_ini || !noche_fin ) return mensaje('La lectura del turno noche no puede ser en blanco, por favor ingrese un valor', 'info');
+      if(noche_ini < 0) return mensaje('La lectura inicial no puede ser negativa | Turno Noche', 'warning');
+      if(noche_fin < 0) return mensaje('La lectura final no puede ser negativa | Turno Noche', 'warning');
+      if(cnoche < 0) return mensaje('El consumo no puede ser negativo | Turno Noche', 'warning');
+      if(n_li < 0) return mensaje('Los litros no pueden ser negativos | Turno Noche', 'warning');
 
-  /// validdacion, si los campos estan vacios
 
 
 // envio de datos al  servidor
@@ -470,14 +591,36 @@ $(document).on('click', '#btn_registro', function () {
  $.ajax({
     url: '../DATABASE/insert_pozos_cag.php',
     type: 'POST',
-    data: { fc_inicio: fc_inicio, fc_cierre: fc_cierre, agencia: agencia, mes: mes, maquina: maquina, ubicacion: ubicacion, pozo: pozo, responsable: responsable },
-    
+    data: { 
+      
+      fc_inicio, 
+      fc_cierre,
+      agencia,
+      mes,
+      maquina,
+      ubicacion,
+      pozo,
+      responsable,
+      dia_ini,
+      dia_fin,
+      cdia,
+      d_li,
+      noche_ini,
+      noche_fin,
+      cnoche,
+      n_li
+
+
+     
+    }, 
     beforeSend: function () {
       mensaje('Enviando datos...', 'info');
       $('#btn_registro').prop('disabled', true);
     },
     success: function (response) {
-     
+       
+      console.log('Respuesta del servidor:', response);
+        
        var json = JSON.parse(response);
     
         if(!json.err){  mensaje(json.mensaje,'success');c_aut_c_agua_pozos(url, params);  $('#modal').modal('hide'); }else{ mensaje( json.mensaje,'error')}

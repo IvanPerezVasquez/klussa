@@ -24,7 +24,8 @@ require('../CONFIG/sys.res.con.php');
             mes, 
             clf_sis_r, 
             clf_desechos, 
-            t_residuo
+            t_residuo, 
+            certib
 
       where
 
@@ -38,7 +39,13 @@ require('../CONFIG/sys.res.con.php');
       and clf_desechos.PK_clf_des = residuos.FK_clf_res
       and t_residuo.PK_t_res = residuos.FK_t_res
       and clf_desechos.PK_clf_des = 1 
-      ORDER BY fc_disp DESC
+      and certib.PK_ceti = residuos.FK_crtib
+
+   GROUP BY 
+        dispocicion.FK_mes,
+        dispocicion.FK_res, 
+        dispocicion.FK_pro
+      ORDER BY fc_disp ASC
       ;
          
    
@@ -71,6 +78,7 @@ if($result){
                            'ct_tn'             => $row['ct_tn'],
                            'ct_lit'            => $row['ct_lit'],
                            'ct_gl'             => $row['ct_gl'],
+                           'CRTIB'             => $row['CRTIB'],
                            'ct_total_des'      => $row['ct_total_des'],
                           'ct_gestor_des'      => $row['ct_gestor_des'],
                           'ct_trasporte_des'   => $row['ct_trasporte_des'],

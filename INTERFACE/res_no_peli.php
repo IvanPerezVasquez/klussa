@@ -1,9 +1,10 @@
-<div class="container contenido-op" style="margin-top: 100px;">
 
-  <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+<div class="p-4" style="margin-top: 100px;">
 
-<!-- Encabezado -->
-    <div class="card-body bg-light mt-3 mb-4 rounded-4">
+  <div class="card bg-light border-0 shadow-sm rounded-4">
+
+    <!-- Encabezado -->
+    <div class="card-body ">
 
           <!-- BANNER -->
       <div class="card border-0 shadow-sm rounded-4 mb-4" id="bnn_int">
@@ -85,8 +86,8 @@
 
 
 
-    <div class="table-responsive rounded-3 shadow-sm">
-       <table class="table table-hover align-middle mb-0 text-nowrap shadow-sm text-uppercase" id="tabla_res">
+    <div class="table-responsive ">
+       <table class="table " id="tabla_res">
           <thead class="text-white" style="background: #212529;">
             <tr>
               <th scope="col">N°</th>

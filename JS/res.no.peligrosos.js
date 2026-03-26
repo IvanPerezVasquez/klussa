@@ -187,140 +187,127 @@ $('#form_modal_footer').empty('');
 `;
 
    var form =`
-   <div class="container mt-2">
-     <div class="card  border-0 rounded-3 ficha-form">
-    <div class="card-header text-white fw-bold py-3" style="background: #212529;">
-      <i class="fa-solid fa-recycle me-2"></i>REGISTRO | BITACORA DE CONTROL RESIDUOS NO PELIGROSOS
-    </div>
-  </div>
-</div>
-   
-<form id="detalle_residuo" class="container-fluid p-4 shadow-sm rounded-3 border-light bg-white">
+ 
+<form id="detalle_residuo" class="container-fluid p-4 shadow-sm rounded-3 bg-white border">
 
-  <!-- Fecha de entrega -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="fecha_entrega">Fecha de entrega</label>
-    <div class="col-md-8">
-      <input type="date" class="form-control-plaintext" id="fecha_entrega" name="fecha_entrega" value="2025-01-10">
+  <!-- HEADER -->
+  <div class="card border-0 mb-4">
+    <div class="card-header text-white fw-bold py-3 rounded-3" style="background:#212529;">
+      <i class="fa-solid fa-recycle me-2"></i>
+      REGISTRO | BITÁCORA DE CONTROL RESIDUOS NO PELIGROSOS
     </div>
   </div>
 
-  <!-- Mes -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_mes_res">Mes</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_mes_res" name="cbx_mes_res"></select>
+  <div class="row g-3">
+
+    <!-- MES -->
+    <div class="col-md-6">
+      <label class="form-label">Mes</label>
+      <select class="form-select" id="cbx_mes_res" name="cbx_mes_res"></select>
     </div>
+
+    <!-- FECHA -->
+    <div class="col-md-6">
+      <label class="form-label">Fecha de entrega</label>
+      <input type="date" class="form-control" id="fecha_entrega" name="fecha_entrega">
+    </div>
+
+    <!-- RESIDUO -->
+    <div class="col-md-6">
+      <label class="form-label">Residuo</label>
+      <select class="form-select" id="cbx_res" name="cbx_res"></select>
+    </div>
+
+    <!-- AGENCIA -->
+    <div class="col-md-6">
+      <label class="form-label">Agencia</label>
+      <select class="form-select" id="cbx_agencia" name="cbx_agencia"></select>
+    </div>
+
+    <!-- UBICACIÓN -->
+    <div class="col-md-6">
+      <label class="form-label">Ubicación</label>
+      <select class="form-select" id="cbx_ubicacion" name="cbx_ubicacion"></select>
+    </div>
+
+    <!-- MAQUINA -->
+    <div class="col-md-6">
+      <label class="form-label">Máquina</label>
+      <select class="form-select" id="cbx_maquina" name="cbx_maquina"></select>
+    </div>
+
+    <!-- CANTIDADES (AGRUPADO) -->
+    <div class="col-12">
+      <label class="form-label fw-bold">Cantidades</label>
+      <div class="row g-2">
+
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="ct_kg" placeholder="KG">
+        </div>
+
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="ct_ton" placeholder="TON">
+        </div>
+
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="ct_lt" placeholder="L">
+        </div>
+
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="ct_gl" placeholder="GL">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COMPROBANTE -->
+    <div class="col-md-6">
+      <label class="form-label">Comprobante</label>
+      <input type="text" class="form-control" id="comprobante" placeholder="Ej: N° 001-2025">
+    </div>
+
+    <!-- GESTORA -->
+    <div class="col-md-6">
+      <label class="form-label">Gestora</label>
+      <select class="form-select" id="cbx_gestora"></select>
+    </div>
+
+    <!-- RESPONSABLE -->
+    <div class="col-md-6">
+      <label class="form-label">Responsable</label>
+      <input type="text" class="form-control" id="responsable">
+    </div>
+
+    <!-- CARGO -->
+    <div class="col-md-6">
+      <label class="form-label">Cargo</label>
+      <input type="text" class="form-control" id="cargo">
+    </div>
+
+     <!-- RESPONSABLE -->
+    <div class="col-md-3">
+      <label class="form-label"> $ Costo Transporte</label>
+      <input type="number" class="form-control" id="ct_trans">
+    </div>
+
+    <!-- CARGO -->
+    <div class="col-md-3">
+      <label class="form-label"> $ Costo Gestor</label>
+      <input type="number" class="form-control" id="ct_gest">
+    </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div class="col-12">
+      <label class="form-label">Descripción de la disposición</label>
+      <textarea class="form-control" rows="3" id="desc_dispo"></textarea>
+    </div>
+
   </div>
 
-  <!-- Residuo -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_res">Residuo</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_res" name="cbx_res"></select>
-    </div>
-  </div>
 
-  <!-- Agencia -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_agencia">Agencia</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_agencia" name="cbx_agencia"></select>
-    </div>
-  </div>
 
-  <!-- Ubicación -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_ubicacion">Ubicación</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_ubicacion" name="cbx_ubicacion"></select>
-    </div>
-  </div>
-
-  <!-- Máquina -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_maquina">Máquina</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_maquina" name="cbx_maquina"></select>
-    </div>
-  </div>
-
-  <!-- Cantidades -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="ct_kg">Cantidad (KG)</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="ct_kg" name="ct_kg" placeholder="Kilos">
-    </div>
-  </div>
-
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="ct_ton">Cantidad (TON)</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="ct_ton" name="ct_ton" placeholder="Toneladas">
-    </div>
-  </div>
-
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="ct_lt">Cantidad (L)</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="ct_lt" name="ct_lt" placeholder="Litros">
-    </div>
-  </div>
-
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="ct_gl">Cantidad (GL)</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="ct_gl" name="ct_gl" placeholder="Galones">
-    </div>
-  </div>
-
-  <!-- Comprobante -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="comprobante">Comprobante</label>
-    <div class="col-md-8">
-      <input 
-        type="text" 
-        class="form-control-plaintext" 
-        id="comprobante" 
-        name="comprobante" 
-        placeholder="Ej: N° 001-2025">
-    </div>
-  </div>
-
-  <!-- Gestora -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cbx_gestora">Gestora</label>
-    <div class="col-md-8">
-      <select class="form-control-plaintext" id="cbx_gestora" name="cbx_gestora"></select>
-    </div>
-  </div>
-
-  <!-- Responsable -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="responsable">Responsable</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="responsable" name="responsable" placeholder="Ej: Katty Conforme">
-    </div>
-  </div>
-
-  <!-- Cargo del responsable -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="cargo">Cargo</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control-plaintext" id="cargo" name="cargo" placeholder="Ej: Supervisor Ambiental">
-    </div>
-  </div>
-
-  <!-- Descripción de la disposición -->
-  <div class="mb-3 row">
-    <label class="col-md-4 col-form-label" for="desc_dispo">Descripción de la disposición</label>
-    <div class="col-md-8">
-      <textarea class="form-control form-control-plaintext" rows="3" id="desc_dispo" name="desc_dispo" placeholder="Detalle de la disposición realizada"></textarea>
-    </div>
-  </div>
 
 </form>
-
    
    
    
@@ -362,6 +349,25 @@ $('#form_modal_footer').append(footer);
 
 
 
+/// cabio dinamico de  select 
+
+$(document).on('change', '#cbx_mes_res', function() {
+ 
+   mes =  this.value; 
+
+   let an = new Date().getFullYear(); // año actual
+
+    mes = mes.padStart(2, '0'); // 01,02,03...
+
+    console.log('Mes seleccionado:', mes); // Verificar el valor del mes seleccionado 
+    
+    if(mes !== ''){ im_fc = an + '-' + mes + '-01';  
+        
+        $('#fecha_entrega').val(im_fc);
+
+     } else { mensaje('Selecciona un mes', 'warning'); }
+
+});
 
 
 
@@ -594,7 +600,8 @@ $(document).on('click', '#btn_registro', function () {
   const responsable = $('#responsable').val().trim();
   const cargo = $('#cargo').val().trim();
   const descrip = $('#desc_dispo').val().trim(); //  valor de  la  descripcion  del  residuo
-  
+  const ct_trans = $('#ct_trans').val().trim(); // costo transporte
+  const ct_gest = $('#ct_gest').val().trim(); 
   /// validdacion, si los campos estan vacios
 
 
@@ -611,13 +618,19 @@ $(document).on('click', '#btn_registro', function () {
   if (manifesto === '') return mensaje('Ingresa un N° comprobante', 'warning');
   if (responsable === '') return mensaje('Ingresa el nombre del responsable', 'warning');
   if (cargo === '') return mensaje('Ingrese su cargo', 'warning');
+  
+  if (ct_trans === '' ) return mensaje('Ingresa el costo del transporte,  si no aplica ingresa 0', 'info');
+  if (ct_gest === '' ) return mensaje('Ingresa el costo del gestor,  si no aplica ingresa 0', 'info');
+  
   if (descrip === '') return mensaje('Ingrese una descripcion', 'warning');
+
+
 ///  ingreso del  registro, 
 
  $.ajax({
     url: '../DATABASE/insert_reg_p.php',
     type: 'POST',
-    data: { fechaEntrega, mes, codigo, agencia, ub, mq, kg, ton, lt, gl, gestora, responsable,manifesto, cargo, descrip },
+    data: { fechaEntrega, mes, codigo, agencia, ub, mq, kg, ton, lt, gl, gestora, responsable,manifesto, cargo, descrip, ct_trans, ct_gest },
     
     beforeSend: function () {
       mensaje('Enviando datos...', 'info');
@@ -717,186 +730,194 @@ var title = `
 
 
    var ficha =`
-<div class="container mt-2">
-  <div class="card border-0 rounded-3 ficha-form">
-    <div class="card-header text-white fw-bold py-3" style="background: #212529;">
-      <i class="fa-solid fa-recycle me-2"></i>REGISTRO | BITÁCORA DE CONTROL DE RESIDUOS NO PELIGROSOS
+<form id="detalle_residuo" class="container-fluid p-4 shadow-sm rounded-3 bg-white border">
+
+  <!-- HEADER -->
+  <div class="card border-0 mb-4">
+    <div class="card-header text-white fw-bold py-3 rounded-3" style="background:#212529;">
+      <i class="fa-solid fa-recycle me-2"></i>
+      REGISTRO | BITÁCORA DE CONTROL RESIDUOS NO PELIGROSOS
     </div>
   </div>
-</div>
-
-<form id="detalle_residuo" class="container-fluid p-4 shadow-sm rounded-3 border-light bg-white text-uppercase">
 
   <div class="row g-3">
 
-    <!-- ========================= -->
-    <!--     COLUMNA IZQUIERDA     -->
-    <!-- ========================= -->
+    <!-- FECHA -->
     <div class="col-md-6">
-
-      <!-- Fecha -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="fc_disp" class="col-auto mb-0 me-3 fw-bold">Fecha</label>
-        <input type="date" id="fc_disp" name="fecha_entrega" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.fc_disp}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
+      <label>Fecha</label>
+      <div class="d-flex">
+        <input type="date" class="form-control" id="fc_disp" name="fecha_entrega" value="${cp.fc_disp}" readonly>
+        <button type="button" id="edit" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
-
-      <!-- Mes -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Mes</label>
-        <input type="text" id="mes_res" name="FK_mes" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.mes_res}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Residuo -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Residuo</label>
-        <input type="text" id="res" name="FK_res" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.descrip_residuo}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Agencia -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Agencia</label>
-        <input type="text" id="agencia" name="FK_pro" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.proyecto}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Ubicación -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Ubicación</label>
-        <input type="text" id="ubicacion" name="FK_ub" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.ubicacion}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
     </div>
 
-    <!-- ========================= -->
-    <!--     COLUMNA DERECHA       -->
-    <!-- ========================= -->
+    <!-- MES -->
     <div class="col-md-6">
-
-      <!-- Máquina -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Máquina</label>
-        <input type="text" id="maquina" name="FK_mq" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.serie_maquina}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Kilos -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="ct_kg" class="col-auto mb-0 me-3 fw-bold">Kilos (KG)</label>
-        <input type="text" id="ct_kg" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.ct_kg}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Toneladas -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="ct_tn" class="col-auto mb-0 me-3 fw-bold">Toneladas (TN)</label>
-        <input type="text" id="ct_tn" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.ct_tn}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Litros -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="ct_lit" class="col-auto mb-0 me-3 fw-bold">Litros (L)</label>
-        <input type="text" id="ct_lit" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.ct_lit}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-      <!-- Galones -->
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="ct_gl" class="col-auto mb-0 me-3 fw-bold">Galones (GL)</label>
-        <input type="text" id="ct_gl" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.ct_gl}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- ========================= -->
-    <!--     CAMPO GRANDE          -->
-    <!-- ========================= -->
-
-    <!-- Gestor -->
-    <div class="col-12">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label class="col-auto mb-0 me-3 fw-bold">Gestor</label>
-        <input type="text" id="gestora" name="FK_gest" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.gestor_res}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_select">
+      <label>Mes</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="mes_res" name="FK_mes" value="${cp.mes_res}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
     </div>
 
-    <!-- Comprobante -->
-    <div class="col-12">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="mnft" class="col-auto mb-0 me-3 fw-bold">Comprobante</label>
-        <input type="text" id="mnft" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.mnft}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
+    <!-- RESIDUO -->
+    <div class="col-md-6">
+      <label>Residuo</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="res" name="FK_res" value="${cp.descrip_residuo}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
     </div>
 
-    <!-- Responsable -->
-    <div class="col-12">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="resp_des" class="col-auto mb-0 me-3 fw-bold">Responsable</label>
-        <input type="text" id="resp_des" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.resp_des}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
+    <!-- AGENCIA -->
+    <div class="col-md-6">
+      <label>Agencia</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="agencia" name="FK_pro" value="${cp.proyecto}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
     </div>
 
-    <!-- Cargo -->
-    <div class="col-12">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="cargo" class="col-auto mb-0 me-3 fw-bold">Cargo</label>
-        <input type="text" id="cargo" class="form-control-plaintext form-control-sm flex-grow-1" value="${cp.cargo}" readonly>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit">
+    <!-- UBICACIÓN -->
+    <div class="col-md-6">
+      <label>Ubicación</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="ubicacion" name="FK_ub" value="${cp.ubicacion}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
     </div>
 
-    <!-- Descripción -->
+    <!-- MAQUINA -->
+    <div class="col-md-6">
+      <label>Máquina</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="maquina" name="FK_mq" value="${cp.serie_maquina}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- CANTIDADES -->
     <div class="col-12">
-      <div class="d-flex align-items-start gap-2 mb-2">
-        <label for="des_des" class="col-auto mb-0 me-3 fw-bold">Descripción</label>
-        <textarea class="form-control-plaintext form-control-sm flex-grow-1" id="des_des" rows="3" readonly>${cp.des_des}</textarea>
-        <button class="btn btn-sm bg-transparent border-0" type="button" id="edit_textarea">
+      <label class="fw-bold">Cantidades</label>
+      <div class="row g-2">
+
+        <div class="col-md-3 d-flex">
+          <input type="text" class="form-control" id="ct_kg" value="${cp.ct_kg}" readonly>
+          <button type="button" id="edit" class="btn btn-light ms-1">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+
+        <div class="col-md-3 d-flex">
+          <input type="text" class="form-control" id="ct_tn" value="${cp.ct_tn}" readonly>
+          <button type="button" id="edit" class="btn btn-light ms-1">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+
+        <div class="col-md-3 d-flex">
+          <input type="text" class="form-control" id="ct_lit" value="${cp.ct_lit}" readonly>
+          <button type="button" id="edit" class="btn btn-light ms-1">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+
+        <div class="col-md-3 d-flex">
+          <input type="text" class="form-control" id="ct_gl" value="${cp.ct_gl}" readonly>
+          <button type="button" id="edit" class="btn btn-light ms-1">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GESTOR -->
+    <div class="col-md-6">
+      <label>Gestor</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="gestora" name="FK_gest" value="${cp.gestor_res}" readonly>
+        <button type="button" id="edit_select" class="btn btn-light ms-2">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- COMPROBANTE -->
+    <div class="col-md-6">
+      <label>Comprobante</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="mnft" value="${cp.mnft}" readonly>
+        <button type="button" id="edit" class="btn btn-light ms-2">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- RESPONSABLE -->
+    <div class="col-md-6">
+      <label>Responsable</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="resp_des" value="${cp.resp_des}" readonly>
+        <button type="button" id="edit" class="btn btn-light ms-2">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- CARGO -->
+    <div class="col-md-6">
+      <label>Cargo</label>
+      <div class="d-flex">
+        <input type="text" class="form-control" id="cargo" value="${cp.cargo}" readonly>
+        <button type="button" id="edit" class="btn btn-light ms-2">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      </div>
+    </div>
+
+     <div class="col-md-3">
+            <label class="form-label fw-semibold">$ Gestor</label>
+            <div class="input-group input-group-sm mb-2">
+              <input type="text" class="form-control" id="ct_gestor_des" value="${cp.ct_gestor_des}" readonly>
+              <button class="btn btn-sm bg-transparent border-0" type="button" id="edit"><i class="fa-solid fa-pencil"></i></button>
+            </div>
+          </div>
+
+           <div class="col-md-3">
+            <label class="form-label fw-semibold">$ Transporte</label>
+            <div class="input-group input-group-sm mb-2">
+              <input type="text" class="form-control" id="ct_trasporte_des" value="${cp.ct_trasporte_des}" readonly>
+              <button class="btn btn-sm bg-transparent border-0" type="button" id="edit"><i class="fa-solid fa-pencil"></i></button>
+            </div>
+          </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div class="col-12">
+      <label>Descripción</label>
+      <div class="d-flex">
+        <textarea class="form-control" id="des_des" rows="3" readonly>${cp.des_des}</textarea>
+        <button type="button" id="edit_textarea" class="btn btn-light ms-2">
           <i class="fa-solid fa-pencil"></i>
         </button>
       </div>
     </div>
 
   </div>
+
 </form>
-
-
-   
    
    
    `;
